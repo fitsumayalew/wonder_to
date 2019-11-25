@@ -61,4 +61,18 @@ type Session struct {
 
 
 
+type Review struct {
+	gorm.Model
+	UserID    uint
+	ShopID    uint
+	Review    string
+	Reply     Reply
+}
+
+type Reply struct {
+	gorm.Model
+	ReviewID  uint
+	ShopID    uint
+	Reply     string
+}
 
