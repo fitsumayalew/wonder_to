@@ -1,0 +1,62 @@
+body {
+    background-color: #22252A;
+}
+
+.fa {
+    color: #ffffff;
+}
+
+h3 h2 p {
+    color: #999999;
+}
+
+.text-center {
+    color: #ffffff;
+}
+
+.forgotpass {
+    padding-left: 50px;
+}
+
+
+/* input#email.form-control {
+    background-color: #2D3035;
+    color: #ffffff;
+} */
+
+span.input-group-addon {
+    background-color: #2D3035;
+}
+
+.form-control {
+    color: #2D3035;
+    border-color: #22252A;
+    border-radius: 2px;
+}
+
+.btn-primary {
+    color: #f98e1d;
+    background-color: #f98e1d;
+    border-color: #f98e1d;
+}
+
+.panel-body {
+    border-color: black;
+    background-color: #2D3035;
+}
+
+.btn {
+    color: #ffffff;
+}
+
+body {
+    margin-top: 25%;
+}
+
+.input-group-addon {
+    color: #ffffff;
+}
+
+button:hover button:focus {
+    color: #f98e1d;
+}

@@ -1,0 +1,15 @@
+body {
+    background-color: #22252a;
+}
+
+.panel-body {
+    background-color: #2d3035;
+}
+
+h3 h4 {
+    color: #ffffff;
+}
+
+.form-group {
+    border-bottom: 2px #ffffff;
+}
