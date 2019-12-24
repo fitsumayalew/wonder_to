@@ -20,6 +20,7 @@ type Input struct {
 	CSRF    string
 }
 
+
 // MinLength checks if a given minium length is satisfied
 func (inVal *Input) MinLength(field string, d int) {
 	value := inVal.Values.Get(field)
@@ -32,7 +33,7 @@ func (inVal *Input) MinLength(field string, d int) {
 }
 
 // Required checks if list of provided form input fields have values
-func (inVal *Input) Required(fields ...string) {
+func (inVal *Input) ValidateRequiredFields(fields ...string) {
 	for _, f := range fields {
 		value := inVal.Values.Get(f)
 		if value == "" {
@@ -62,12 +63,12 @@ func (inVal *Input) PasswordMatches(password string, confPassword string) {
 	}
 
 	if pwd != confPwd {
-		inVal.VErrors.Add(password, "The Password and Confim Password values did not match")
-		inVal.VErrors.Add(confPassword, "The Password and Confim Password values did not match")
+		inVal.VErrors.Add(password, "The Password and Confirm Password values did not match")
+		inVal.VErrors.Add(confPassword, "The Password and Confirm Password values did not match")
 	}
 }
 
 // Valid checks if any form input validation has failed or not
-func (inVal *Input) Valid() bool {
+func (inVal *Input) IsValid() bool {
 	return len(inVal.VErrors) == 0
 }
