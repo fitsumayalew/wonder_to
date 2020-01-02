@@ -1,0 +1,115 @@
+{{ define "admin.index.layout" }}
+    {{ template "admin.header" . }}
+    {{ template "admin.index.content" . }}
+    {{ template "admin.footer" .}}
+{{ end }}
+
+{{ define "admin.index.content"}}
+
+<!-- Sidebar Navigation end-->
+<div class="page-content">
+    <section class="no-padding-bottom" style="height: 700px; overflow-y: auto;">
+        <div class="container-fluid">
+            <img src="assets/bkg.png" class="img-fluid" height="270px" width="100%"><br/><br/>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="checklist-block block">
+                        <div class="title"><strong>Stats</strong></div>
+                        ----PLACE RATINGS STAR HERE----------
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="messages-block block">
+                        <div class="title"><strong>Upcoming Appointments</strong></div>
+                        <div class="messages">
+                            <a href="#" class="message align-items-center" style="width: 25%;">
+                                <div class="profile"><img src="assets/img/avatar-3.jpg" alt="..." class="img-fluid">
+                                </div>
+                                <div class="content"><strong class="d-block" style="font-size: 14px; font-weight: 600;">Nadia
+                                        Halsey</strong><span class="d-block"
+                                                             style="font-size: 12px">Clean Shave</span><small
+                                            class="date d-block">9:30am</small></div>
+                            </a>
+
+                            <a href="#" class="message align-items-center" style="width: 25%;">
+                                <div class="profile"><img src="assets/img/avatar-3.jpg" alt="..." class="img-fluid">
+                                </div>
+                                <div class="content"><span class="d-block" style="font-size: 14px; font-weight: 600;">Nadia Halsey</span><span
+                                            class="d-block" style="font-size: 12px">Fade Cut</span><small
+                                            class="date d-block">9:30am</small></div>
+                            </a>
+                            <a href="#" class="message align-items-center" style="width: 25%;">
+                                <div class="profile"><img src="assets/img/avatar-2.jpg" alt="..." class="img-fluid">
+                                </div>
+                                <div class="content"><span class="d-block" style="font-size: 14px; font-weight: 600;">Peter Ramsy</span><span
+                                            class="d-block" style="font-size: 12px">Cornrow Cut</span><small
+                                            class="date d-block">7:40am</small></div>
+                            </a>
+                            <a href="#" class="message align-items-center">
+                                <div class="profile"><img src="assets/img/avatar-1.jpg" alt="..." class="img-fluid">
+                                </div>
+                                <div class="content"><span class="d-block" style="font-size: 14px; font-weight: 600;">Sam Kaheil</span><span
+                                            class="d-block" style="font-size: 12px">Clean Shave</span><small
+                                            class="date d-block">6:55am</small></div>
+                            </a>
+                            <br/><br/>
+                            <div class="d-flex flex-row-reverse">
+                                <a class="title p-2"><strong style="font-size: 15px">View
+                                        All</strong></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="checklist-block block">
+                        <div class="title"><strong>Views This Week</strong></div>
+                        ----PLACE BAR CHART HERE----------
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="messages-block block">
+                        <div class="title"><strong>Top Reviews</strong></div>
+                        <div class="messages">
+                            <a href="#" class="message align-items-center" style="width: 100%;">
+                                <div class="profile"><img src="assets/img/avatar-3.jpg" alt="..." class="img-fluid">
+                                </div>
+                                <div class="content"><strong class="d-block" style="font-size: 14px; font-weight: 600;">Nadia
+                                        Halsey</strong><span class="d-block" style="font-size: 13px">Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam ipsa a laborum, non sed sapiente qui numquam alias quas deserunt error ut. Culpa eaque temporibus natus dolores minus? Quos, tenetur.</span>
+                                    <small class="date d-block">9:30am</small>
+                                </div>
+                            </a>
+
+                            <a href="#" class="message align-items-center" style="width: 100%;">
+                                <div class="profile"><img src="assets/img/avatar-3.jpg" alt="..." class="img-fluid">
+                                </div>
+                                <div class="content"><span class="d-block" style="font-size: 14px; font-weight: 600;">Nadia Halsey</span><span
+                                            class="d-block" style="font-size: 13px">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe fugit ab consectetur? Atque sint nulla architecto praesentium fugit corrupti, id quo officiis sapiente rem vitae eius? Mollitia nisi quas dolores?</span>
+                                    <small class="date d-block">9:30am</small>
+                                </div>
+                            </a>
+                            <a href="#" class="message align-items-center" style="width: 100%;">
+                                <div class="profile"><img src="assets/img/avatar-2.jpg" alt="..." class="img-fluid">
+                                </div>
+                                <div class="content"><span class="d-block" style="font-size: 14px; font-weight: 600;">Peter Ramsy</span><span
+                                            class="d-block" style="font-size: 13px">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi nostrum, obcaecati, ut ea saepe a, ad aliquid repellendus dolore laboriosam non delectus sed quia officia! Odio maiores vero sint ducimus!</span>
+                                    <small class="date d-block">7:40am</small>
+                                </div>
+                            </a>
+                            <br/><br/>
+                            <div class="d-flex flex-row-reverse">
+                                <a class="title p-2"><strong style="font-size: 15px">View
+                                        All</strong></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{{end}}
