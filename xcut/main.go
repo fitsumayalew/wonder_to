@@ -79,8 +79,9 @@ func main() {
 	http.HandleFunc("/", userHandler.Index)
 	http.Handle("/admin", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminIndex))))
 	http.HandleFunc("/login", userHandler.Login)
-
+	http.Handle("/finishSignup",userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminSignUp))))
+	http.Handle("/basicInfo",userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminBasicInfo))))
 	http.Handle("/logout", userHandler.Authenticated(http.HandlerFunc(userHandler.Logout)))
-
+	http.HandleFunc("/signup", userHandler.SignUp)
 	http.ListenAndServe(":8181", nil)
 }
