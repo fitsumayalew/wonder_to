@@ -29,18 +29,27 @@ type User struct {
 //Shop Represents the the shops the user views
 type Shop struct {
 	gorm.Model
-	Name     string `gorm:"type:varchar(255);not null"`
-	City     string
-	Lat      float32
-	Long     float32
-	Address string `gorm:"type:varchar(255);not null; unique"`
-	Phone    string  `gorm:"type:varchar(32);not null; unique"`
-	Website  string `gorm:"type:varchar(255);not null; unique"`
-	Image    string `gorm:"type:varchar(255)"`
-	UserID	uint
-	Services []Services
+	Name      string `gorm:"type:varchar(255);not null"`
+	City      string
+	Lat       float64
+	Long      float64
+	Address   string `gorm:"type:varchar(255);not null; unique"`
+	Phone     string `gorm:"type:varchar(32)"`
+	Website   string `gorm:"type:varchar(255)"`
+	Image     string `gorm:"type:varchar(255)"`
+	UserID    uint
+	Services  []Services
+	OpenHours []OpenHour
 }
 
+type OpenHour struct {
+	gorm.Model
+	Day       string `gorm:"type:varchar(3);not null"`
+	StartHour string `gorm:"type:varchar(8);not null"`
+	EndHour   string `gorm:"type:varchar(8);not null"`
+	ShopID    uint
+	Services  []Services
+}
 
 type Appointments struct {
 	gorm.Model
@@ -57,22 +66,17 @@ type Session struct {
 	SigningKey []byte `gorm:"type:varchar(255);not null"`
 }
 
-
-
-
-
 type Review struct {
 	gorm.Model
-	UserID    uint
-	ShopID    uint
-	Review    string
-	Reply     Reply
+	UserID uint
+	ShopID uint
+	Review string
+	Reply  Reply
 }
 
 type Reply struct {
 	gorm.Model
-	ReviewID  uint
-	ShopID    uint
-	Reply     string
+	ReviewID uint
+	ShopID   uint
+	Reply    string
 }
-
