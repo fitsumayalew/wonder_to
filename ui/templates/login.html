@@ -28,7 +28,11 @@
             <form action="#" method="post">
                 <h2>Log In</h2>
                 <p class="lead">x-cut.</p>
-                <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
+                {{if .CSRF}}
+                    <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
+                {{else}}
+                    <input type="hidden" name="_csrf" value="{{.Values.Get "_csrf"}}"/>
+                {{end}}
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-paper-plane icon_border"></i></span>
@@ -48,7 +52,7 @@
                     <label class="text-danger">{{ . }}</label> {{end}}
                     </span>
                 </div>
-                <span><span style="color: rgb(156, 156, 156);">New to x-cut?</span> <a class="newXcut" href="/signup">
+                <span><span style="color: rgb(156, 156, 156);">New to x-cut?</span> <a class="newxCut" href="/signup">
                         open your shop now</a>
                 </span>
             </form>

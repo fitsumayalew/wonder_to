@@ -26,7 +26,7 @@
                             <div class="location">
                                 <span style="color: #F98E1D; font-weight: 700; font-size: 20px;margin-bottom: 8px;">Location</span><br/>
                                 <div class="mapouter">
-                                    <div class="gmap_canvas"><iframe width="480" height="350" id="gmap_canvas" src="https://maps.google.com/maps?q='{{.Lat}}','{{.Long}}'&hl=es&z=14&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe></div>
+                                    <div class="gmap_canvas"><iframe width="480" height="350" id="gmap_canvas" src="https://maps.google.com/maps?q={{.Lat}},{{.Long}}&hl=en&z=14&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe></div>
                                     <style>
                                         .mapouter {
                                             position: relative;
@@ -44,15 +44,15 @@
                                     </style>
                                 </div>
                             </div><br/>
-{{/*                            <div class="open_hours">*/}}
-{{/*                                <span style="color: #F98E1D; font-weight: 700; font-size: 20px;margin-bottom: 8px;">Open Hours</span><br/>*/}}
-{{/*                                <span><span style="color: rgb(247, 187, 123);">Mon:</span>{{ .hours_mon }}</span><br/>*/}}
-{{/*                                <span><span style="color: rgb(247, 187, 123);">Tue.:</span style="color:rgb(247, 187, 123);">{{ .hours_mon }}</span><br/>*/}}
-{{/*                                <span><span style="color: rgb(247, 187, 123);">Wed:</span style="color:rgb(247, 187, 123);">{{ .hours_mon }}</span><br/>*/}}
-{{/*                                <span><span style="color: rgb(247, 187, 123);">Thu:</span style="color:rgb(247, 187, 123);">{{ .hours_mon }}</span><br/>*/}}
-{{/*                                <span><span style="color: rgb(247, 187, 123);">Fri:</span style="color: rgb(247, 187, 123);">{{ .hours_mon }}</span><br/>*/}}
-{{/*                                <span><span style="color: rgb(247, 187, 123);">Sat:</span style="color: rgb(247, 187, 123);">{{ .hours_mon }}</span><br/>*/}}
-{{/*                            </div><br/>*/}}
+                            <div class="open_hours">
+                                <span style="color: #F98E1D; font-weight: 700; font-size: 20px;margin-bottom: 8px;">Open Hours</span><br/>
+                                <span><span style="color: rgb(247, 187, 123);">Mon:</span>{{ .hours_mon }}</span><br/>
+                                <span><span style="color: rgb(247, 187, 123);">Tue.:</span style="color:rgb(247, 187, 123);">{{ .hours_mon }}</span><br/>
+                                <span><span style="color: rgb(247, 187, 123);">Wed:</span style="color:rgb(247, 187, 123);">{{ .hours_mon }}</span><br/>
+                                <span><span style="color: rgb(247, 187, 123);">Thu:</span style="color:rgb(247, 187, 123);">{{ .hours_mon }}</span><br/>
+                                <span><span style="color: rgb(247, 187, 123);">Fri:</span style="color: rgb(247, 187, 123);">{{ .hours_mon }}</span><br/>
+                                <span><span style="color: rgb(247, 187, 123);">Sat:</span style="color: rgb(247, 187, 123);">{{ .hours_mon }}</span><br/>
+                            </div><br/>
 {{/*                            <div class="extra_perks">*/}}
 {{/*                                <span style="color: #F98E1D; font-weight: 700; font-size: 20px;margin-bottom: 8px;">Extra Perks</span><br/>*/}}
 {{/*                            </div>*/}}

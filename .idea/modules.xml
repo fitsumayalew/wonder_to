@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/xcut.iml" filepath="$PROJECT_DIR$/.idea/xcut.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/xCut.iml" filepath="$PROJECT_DIR$/.idea/xCut.iml" />
     </modules>
   </component>
 </project>

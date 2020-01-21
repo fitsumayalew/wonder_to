@@ -1,8 +1,8 @@
 package shop
 
 import (
-	"xcut/entity"
-	"xcut/shop"
+	"xCut/entity"
+	"xCut/shop"
 )
 
 type ShopService struct {

@@ -1,15 +1,13 @@
 package services
 
 import (
-	"xcut/entity"
-	"xcut/review"
+	"xCut/entity"
+	"xCut/review"
 )
 
-type ReviewService struct{
+type ReviewService struct {
 	reviewRepo review.ReviewRepository
 }
-
-
 
 func NewReviewService(revoRepo review.ReviewRepository) review.ReviewService {
 	return &ReviewService{reviewRepo: revoRepo}
@@ -32,7 +30,6 @@ func (rs *ReviewService) GetReview(id uint) (*entity.Review, []error) {
 	return rev, errs
 }
 
-
 // GetReviewByShopID  retrieves stored comment by its id
 func (rs *ReviewService) GetReviewsByShopID(ShopID uint) ([]entity.Review, []error) {
 	revs, errs := rs.reviewRepo.GetReviewsByShopID(ShopID)
@@ -41,6 +38,7 @@ func (rs *ReviewService) GetReviewsByShopID(ShopID uint) ([]entity.Review, []err
 	}
 	return revs, errs
 }
+
 // UpdateReview updates a given review in a database
 func (rs *ReviewService) UpdateReview(review *entity.Review) (*entity.Review, []error) {
 	revs, errs := rs.reviewRepo.UpdateReview(review)
@@ -49,15 +47,15 @@ func (rs *ReviewService) UpdateReview(review *entity.Review) (*entity.Review, []
 	}
 	return revs, errs
 }
+
 // DeleteReview deletes a given review
-func (rs *ReviewService) DeleteReview(id uint) (*entity.Review, []error)  {
+func (rs *ReviewService) DeleteReview(id uint) (*entity.Review, []error) {
 	revs, errs := rs.reviewRepo.DeleteReview(id)
 	if len(errs) > 0 {
 		return nil, errs
 	}
 	return revs, errs
 }
-
 
 // StoreReview stores a given review
 func (rs *ReviewService) StoreReview(review *entity.Review) (*entity.Review, []error) {

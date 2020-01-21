@@ -2,14 +2,13 @@ package repository
 
 import (
 	"github.com/jinzhu/gorm"
-	"xcut/entity"
-	"xcut/review"
+	"xCut/entity"
+	"xCut/review"
 )
 
 type ReviewGormRepo struct {
 	conn *gorm.DB
 }
-
 
 // NewReviewtGormRepo returns new object of ReviewGormRepo
 func NewReviewGormRepo(db *gorm.DB) review.ReviewRepository {
@@ -25,17 +24,19 @@ func (revRepo *ReviewGormRepo) GetReviews() ([]entity.Review, []error) {
 	}
 	return revws, errs
 }
+
 // GetReviewByShopID retrieve a review from the database by its shopid
 func (revRepo *ReviewGormRepo) GetReviewsByShopID(ShopID uint) ([]entity.Review, []error) {
 	revo := []entity.Review{}
-	errs := revRepo.conn.Set("gorm:auto_preload",true).Find(&revo, "shop_id=?",ShopID).GetErrors()
+	errs := revRepo.conn.Set("gorm:auto_preload", true).Find(&revo, "shop_id=?", ShopID).GetErrors()
 	if len(errs) > 0 {
 		return nil, errs
 	}
 	return revo, errs
 }
+
 // UpdateReview updates a given review in the database
-func (revRepo *ReviewGormRepo) UpdateReview(review *entity.Review) (*entity.Review, []error){
+func (revRepo *ReviewGormRepo) UpdateReview(review *entity.Review) (*entity.Review, []error) {
 	revi := review
 	errs := revRepo.conn.Save(revi).GetErrors()
 	if len(errs) > 0 {
@@ -46,7 +47,7 @@ func (revRepo *ReviewGormRepo) UpdateReview(review *entity.Review) (*entity.Revi
 
 func (revRepo *ReviewGormRepo) GetReview(id uint) (*entity.Review, []error) {
 	review := entity.Review{}
-	errs := revRepo.conn.Set("gorm:auto_preload",true).First(&review,id).GetErrors()
+	errs := revRepo.conn.Set("gorm:auto_preload", true).First(&review, id).GetErrors()
 	if len(errs) > 0 {
 		return nil, errs
 	}

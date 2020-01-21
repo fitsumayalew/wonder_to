@@ -1,12 +1,10 @@
 package review
 
 import (
-	"xcut/entity"
+	"xCut/entity"
 )
 
 type ReviewRepository interface {
-
-
 	GetReviews() ([]entity.Review, []error)
 	GetReview(id uint) (*entity.Review, []error)
 	//getRecentReview

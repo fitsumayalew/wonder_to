@@ -17,8 +17,8 @@
         <script src="assets/js/jquery-3.4.1.min.js"></script>
         <script src="assets/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="assets/css/signup.css">
-        <script src="assets/js/script.js"></script>
-        <script src="swipe_master/swipe.js"></script>
+
+
     </head>
 
     <body>
@@ -28,7 +28,11 @@
                 <div class="signup-form" class="swipe">
                     <form action="/signup" method="POST">
                         <h2>Create Account</h2>
-                        <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
+                        {{if .CSRF}}
+                            <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
+                        {{else}}
+                            <input type="hidden" name="_csrf" value="{{.Values.Get "_csrf"}}"/>
+                        {{end}}
                         <p class="lead ">x-cut</p>
                         <div class="form-group">
                             <div class="input-group">
@@ -36,26 +40,28 @@
                                 <input type="text" class="form-control " name="phone" placeholder="Phone Number"
                                        required="required " size="10" value='{{ .Values.Get "phone" }}'/>
                                 <br/>
-                                <span>
+
+                            </div>
+                            <span>
                                     {{with .VErrors.Get "phone" }}
                                         <label class="text-danger">{{ . }}</label>
                                     {{end}}
                                 </span>
-                            </div>
                         </div>
 
                         <div class="form-group ">
                             <div class="input-group ">
                                 <span class="input-group-addon "><i class="fa fa-paper-plane icon_border"></i></span>
                                 <input type="email" class="form-control " name="email" placeholder="Email Address "
-                                       required="required " value='{{ .Values.Get "email" }}'>
-                                <br/>
-                                <span>
+                                       required="required " value='{{ .Values.Get "email" }}'><br/>
+
+                            </div>
+                            <span>
+
                                     {{with .VErrors.Get "email" }}
                                         <label class="text-danger">{{ . }}</label>
                                     {{end}}
                                 </span>
-                            </div>
                         </div>
 
 
@@ -64,26 +70,27 @@
                                 <span class="input-group-addon "><i class="fa fa-lock icon_border"></i></span>
                                 <input type="text" class="form-control " name="fullname" placeholder="Full Name"
                                        required="required" value='{{ .Values.Get "fullname" }}'><br/>
-                                <span>
+
+                            </div>
+                            <span>
                                     {{with .VErrors.Get "fullname" }}
                                         <label class="text-danger">{{ . }}</label>
                                     {{end}}
                                 </span>
-                            </div>
                         </div>
-
 
                         <div class="form-group ">
                             <div class="input-group ">
                                 <span class="input-group-addon "><i class="fa fa-lock icon_border"></i></span>
                                 <input type="password" class="form-control " name="password" placeholder="Password"
                                        required="required"><br/>
-                                <span>
+
+                            </div>
+                            <span>
                                     {{with .VErrors.Get "password" }}
                                         <label class="text-danger">{{ . }}</label>
                                     {{end}}
                                 </span>
-                            </div>
                         </div>
                         <div class="form-group ">
                             <div class="input-group ">
@@ -92,26 +99,25 @@
                                     </span>
                                 <input type="password" class="form-control " name="confirmPassword"
                                        placeholder="Confirm Password " required="required"><br/>
-                                <span>
+
+                            </div>
+                            <span>
                                     {{with .VErrors.Get "confirmPassword" }}
                                         <label class="text-danger">{{ . }}</label>
                                     {{end}}
                                 </span>
-                            </div>
                         </div>
-
+                        <p style="color: white;">Sign Up as:</p>
                         <div class="form-group ">
-                            <div class="input-group ">
-                                <span class="input-group-addon">
-                                        <i class="fa fa-lock icon_border"></i>
-                                    </span>
-                                <input type="radio" name="type" value="customer" checked="checked">Customer<br>
-                                <input type="radio" name="type" value="barbershop">BarberShop<br>
-                                <br/>
+                            <div style="color: white;" class="input-group" class="align-content-sm-around">
+
+                                <label class="radio-inline"><input type="radio" name="type" value="customer"
+                                                                   checked="checked">&nbsp;&nbsp;Customer&nbsp;&nbsp;&nbsp;</label>
+                                <label class="radio-inline"><input type="radio" name="type" value="barbershop">&nbsp;&nbsp;BarberShop</label>
+
 
                             </div>
                         </div>
-
 
 
                         <button type="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button>

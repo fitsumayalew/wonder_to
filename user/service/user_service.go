@@ -1,15 +1,13 @@
 package service
 
 import (
-	"xcut/entity"
-	"xcut/user"
+	"xCut/entity"
+	"xCut/user"
 )
 
 type UserService struct {
 	userRepo user.UserRepository
 }
-
-
 
 ///It's better to return false if error happens instead of allowing user to create a new email when an error occured
 func (us *UserService) EmailExists(email string) bool {
@@ -20,17 +18,17 @@ func (us *UserService) EmailExists(email string) bool {
 	return true
 }
 
-
 func NewUserService(userRepo user.UserRepository) user.UserService {
-	return &UserService{userRepo: userRepo,}
+	return &UserService{userRepo: userRepo}
 }
 
 //get user by id
 func (us *UserService) User(id uint) (*entity.User, []error) {
 	return us.userRepo.User(id)
 }
+
 //get user by Id
-func (us *UserService) UserByEmail(email string) (*entity.User, [] error) {
+func (us *UserService) UserByEmail(email string) (*entity.User, []error) {
 	return us.userRepo.UserByEmail(email)
 }
 

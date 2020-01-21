@@ -1,14 +1,15 @@
 package service
 
 import (
-	"xcut/entity"
-	"xcut/user"
+	"xCut/entity"
+	"xCut/user"
 )
 
 // RoleService implements menu.RoleService interface
 type RoleService struct {
 	roleRepo user.RoleRepository
 }
+
 func NewRoleService(RoleRepo user.RoleRepository) user.RoleService {
 	return &RoleService{roleRepo: RoleRepo}
 }

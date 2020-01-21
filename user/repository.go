@@ -1,12 +1,11 @@
 package user
 
-import "xcut/entity"
+import "xCut/entity"
 
 type UserRepository interface {
-	User(id uint) (*entity.User,[]error)
-	StoreUser(user *entity.User) (*entity.User,[]error)
-	UserByEmail(email string) (*entity.User, [] error)
-
+	User(id uint) (*entity.User, []error)
+	StoreUser(user *entity.User) (*entity.User, []error)
+	UserByEmail(email string) (*entity.User, []error)
 }
 type RoleRepository interface {
 	Roles() ([]entity.Role, []error)
@@ -20,6 +19,5 @@ type SessionRepository interface {
 	Session(sessionId string) (*entity.Session, []error)
 	Sessions() ([]entity.Session, []error)
 	StoreSession(session *entity.Session) (*entity.Session, []error)
-	DeleteSession(sessionId string ) (*entity.Session, []error)
+	DeleteSession(sessionId string) (*entity.Session, []error)
 }
-

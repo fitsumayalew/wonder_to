@@ -2,16 +2,14 @@ package repository
 
 import (
 	"github.com/jinzhu/gorm"
-	"xcut/entity"
-	"xcut/user"
+	"xCut/entity"
+	"xCut/user"
 )
 
 // SessionGormRepo implements user.SessionRepository interface
 type SessionGormRepo struct {
 	conn *gorm.DB
 }
-
-
 
 // NewSessionGormRepo  returns a new SessionGormRepo object
 func NewSessionGormRepo(db *gorm.DB) user.SessionRepository {
@@ -21,7 +19,7 @@ func NewSessionGormRepo(db *gorm.DB) user.SessionRepository {
 // Session returns a given stored session
 func (sr *SessionGormRepo) Session(sessionId string) (*entity.Session, []error) {
 	session := entity.Session{}
-	errs := sr.conn.Find(&session,"session_id=?",sessionId).GetErrors()
+	errs := sr.conn.Find(&session, "session_id=?", sessionId).GetErrors()
 	return &session, errs
 }
 

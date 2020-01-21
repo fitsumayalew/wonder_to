@@ -5,8 +5,8 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"time"
-	"xcut/entity"
-	"xcut/rtoken"
+	"xCut/entity"
+	"xCut/rtoken"
 )
 
 const SessionKey = "session_key"
@@ -43,7 +43,6 @@ func SetCookie(claims jwt.Claims, expire int64, signingKey []byte, w http.Respon
 
 	http.SetCookie(w, &cookie)
 }
-
 
 // expire existing session
 func RemoveCookie(w http.ResponseWriter) {

@@ -1,8 +1,8 @@
 package services
 
 import (
-	"xcut/entity"
-	"xcut/reply"
+	"xCut/entity"
+	"xCut/reply"
 )
 
 type ReplyService struct {

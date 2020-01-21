@@ -1,15 +1,14 @@
 package service
 
 import (
-	"xcut/entity"
-	"xcut/user"
+	"xCut/entity"
+	"xCut/user"
 )
 
 // SessionServiceImpl implements user.SessionService interface
 type SessionServiceImpl struct {
 	sessionRepo user.SessionRepository
 }
-
 
 // NewSessionService  returns a new SessionService object
 func NewSessionService(sessRepository user.SessionRepository) user.SessionService {
@@ -20,9 +19,10 @@ func NewSessionService(sessRepository user.SessionRepository) user.SessionServic
 func (ss *SessionServiceImpl) Session(sessionId string) (*entity.Session, []error) {
 	return ss.sessionRepo.Session(sessionId)
 }
+
 // Returns all the sessions
 func (ss *SessionServiceImpl) Sessions() ([]entity.Session, []error) {
-	return  ss.sessionRepo.Sessions()
+	return ss.sessionRepo.Sessions()
 }
 
 // StoreSession stores a given session
@@ -32,5 +32,5 @@ func (ss *SessionServiceImpl) StoreSession(session *entity.Session) (*entity.Ses
 
 // DeleteSession deletes a given session
 func (ss *SessionServiceImpl) DeleteSession(sessionId string) (*entity.Session, []error) {
-	return  ss.sessionRepo.DeleteSession(sessionId)
+	return ss.sessionRepo.DeleteSession(sessionId)
 }

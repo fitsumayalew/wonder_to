@@ -5,13 +5,13 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"html/template"
 	"net/http"
-	"xcut/entity"
-	"xcut/rtoken"
-	shopRepoImport "xcut/shop/repository"
-	shopServiceImport "xcut/shop/service"
-	userRepoImport "xcut/user/repository"
-	userServiceImport "xcut/user/service"
-	"xcut/xcut/http/handler"
+	"xCut/entity"
+	"xCut/rtoken"
+	shopRepoImport "xCut/shop/repository"
+	shopServiceImport "xCut/shop/service"
+	userRepoImport "xCut/user/repository"
+	userServiceImport "xCut/user/service"
+	"xCut/xcut/http/handler"
 )
 
 func createTables(dbconn *gorm.DB) []error {
@@ -71,7 +71,7 @@ func main() {
 	shopService := shopServiceImport.NewShopService(shopRepo)
 
 	userHandler := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
-	adminDashboardHandler := handler.NewAdminDashboardHandler(tmpl,shopService,csrfSignKey)
+	adminDashboardHandler := handler.NewAdminDashboardHandler(tmpl, shopService, csrfSignKey)
 
 	fs := http.FileServer(http.Dir("ui/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
@@ -79,8 +79,8 @@ func main() {
 	http.HandleFunc("/", userHandler.Index)
 	http.Handle("/admin", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminIndex))))
 	http.HandleFunc("/login", userHandler.Login)
-	http.Handle("/finishSignup",userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminSignUp))))
-	http.Handle("/basicInfo",userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminBasicInfo))))
+	http.Handle("/finishSignup", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminSignUp))))
+	http.Handle("/basicInfo", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminBasicInfo))))
 	http.Handle("/logout", userHandler.Authenticated(http.HandlerFunc(userHandler.Logout)))
 	http.HandleFunc("/signup", userHandler.SignUp)
 	http.ListenAndServe(":8181", nil)

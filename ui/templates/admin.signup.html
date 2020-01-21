@@ -11,21 +11,19 @@
         <title>Signup page</title>
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
         <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
-        <link rel="stylesheet"
-              href="http://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+
         <script src="assets/js/jquery-3.4.1.min.js"></script>
         <script src="assets/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="assets/css/signup.css">
-        <script src="assets/js/script.js"></script>
-        <script src="swipe_master/swipe.js"></script>
     </head>
 
     <body>
     <div class="container d-flex justify-content-center">
         <div class="row">
             <div class="col-lg-7">
-                <div class="signup-form" class="swipe">
+                <div class="signup-form">
                     <form action="/finishSignup" method="post">
                         <h2>Create Account</h2>
                         <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
@@ -34,15 +32,16 @@
 
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fas fa-store-alt icon_border"></i></span>
+                                <span class="input-group-addon"><i class="fa fa-user-circle icon_border"></i></span>
                                 <input type="text" class="form-control" name="shopName" placeholder="Shop Name"
                                        required="required" value='{{ .Values.Get "shopName" }}'><br/>
-                                <span>
+
+                            </div>
+                            <span>
                                 {{with .VErrors.Get "shopName" }}
                                     <label class="text-danger">{{ . }}</label>
                                 {{end}}
                             </span>
-                            </div>
                         </div>
 
 
@@ -51,71 +50,58 @@
                                 <span class="input-group-addon"><i class="fa fa-phone icon_border"></i></span>
                                 <input type="number " class="form-control " name="phone" placeholder="Phone Number "
                                        required="required " size="10" value='{{ .Values.Get "phone" }}'/> <br/>
-                                <span>
+
+                            </div>
+                            <span>
                                     {{with .VErrors.Get "phone" }}
                                         <label class="text-danger">{{ . }}</label>
                                     {{end}}
                                 </span>
-                            </div>
                         </div>
 
 
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fas fa-store-alt icon_border"></i></span>
+                                <span class="input-group-addon"><i class="fa fa-building icon_border"></i></span>
                                 <input type="text" class="form-control" name="city" placeholder="city"
                                        required="required" value='{{ .Values.Get "city" }}'>> <br/>
-                                <span>
+
+                            </div>
+                            <span>
                                 {{with .VErrors.Get "city" }}
                                     <label class="text-danger">{{ . }}</label> {{end}}
                             </span>
-                            </div>
                         </div>
-
 
 
                         <div class="form-group">
                             <div class="input-group">
 
-                                <span class="input-group-addon"><i class="fas fa-store-alt icon_border"></i></span>
+                                <span class="input-group-addon"><i class="fa fa-address-book icon_border"></i></span>
                                 <input type="text" class="form-control" name="address" placeholder="Address"
                                        required="required" value='{{ .Values.Get "address" }}'>><br/>
-                                <span>
+
+                            </div>
+                            <span>
                                 {{with .VErrors.Get "address" }}
                                     <label class="text-danger">{{ . }}</label>
                                 {{end}}
                             </span>
-                            </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-group">
+                                <div id="map" style="width: 100%;height: 300px;"></div>
 
-                                <span class="input-group-addon"><i class="fas fa-store-alt icon_border"></i></span>
-                                <input type="text" class="form-control" name="long" placeholder="Longitude"
-                                       required="required" value='{{ .Values.Get "long" }}'>><br/>
-                                <span>
-                                {{with .VErrors.Get "long" }}
-                                    <label class="text-danger">{{ . }}</label>
-                                {{end}}
-                            </span>
+
+
                             </div>
+
                         </div>
-
-
-                        <div class="form-group">
-                            <div class="input-group">
-
-                                <span class="input-group-addon"><i class="fas fa-store-alt icon_border"></i></span>
-                                <input type="text" class="form-control" name="lat" placeholder="Latitude"
-                                       required="required" value='{{ .Values.Get "lat" }}'>><br/>
-                                <span>
-                                {{with .VErrors.Get "lat" }}
-                                    <label class="text-danger">{{ . }}</label>
-                                {{end}}
-                            </span>
-                            </div>
-                        </div>
+                        <input hidden type="text" id="lng" class="form-control" name="lng" placeholder="Longitude"
+                               required="required" value='{{ .Values.Get "lng" }}'>><br/>
+                        <input hidden type="text" id="lat" class="form-control" name="lat" placeholder="Latitude"
+                               required="required" value='{{ .Values.Get "lat" }}'>><br/>
 
 
                         <button type="submit" class="btn btn-primary btn-block btn-lg">Finish Sign Up</button>
@@ -125,6 +111,43 @@
             </div>
         </div>
     </div>
+
+    <script>
+        var map;
+        var marker;
+
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: {lat: 9.005848, lng: 38.749509}
+            });
+
+            map.addListener('click', function (e) {
+                placeMarkerAndPanTo(e.latLng, map);
+            });
+
+
+
+
+        }
+
+        function placeMarkerAndPanTo(latLng, map) {
+            if (marker == null) {
+                marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map
+                });
+            } else {
+                marker.setPosition(latLng);
+            }
+            document.getElementById("lat").value = marker.position.lat()
+            document.getElementById("lng").value = marker.position.lng()
+            map.panTo(latLng);
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJ9CyueT7vo_v4nILzwDNMAOY7zGzn2ZE&callback=initMap"
+            async defer></script>
 
 
     </body>

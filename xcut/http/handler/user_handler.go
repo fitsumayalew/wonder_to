@@ -5,15 +5,15 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"html/template"
 	"net/http"
-	"xcut/util"
+	"xCut/util"
 
-	"xcut/permission"
-	"xcut/rtoken"
+	"xCut/permission"
+	"xCut/rtoken"
 
-	"xcut/entity"
-	"xcut/form"
-	"xcut/session"
-	"xcut/user"
+	"xCut/entity"
+	"xCut/form"
+	"xCut/session"
+	"xCut/user"
 )
 
 // UserHandler handler handles user related requests
@@ -33,7 +33,7 @@ const typeKey = "type"
 const confirmPasswordKey = "confirmPassword"
 const shopNameKey = "shopName"
 const addressKey = "address"
-const longKey = "long"
+const lngKey = "lng"
 const latKey = "lat"
 const cityKey = "city"
 const csrfKey = "_csrf"
@@ -263,6 +263,8 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	} else {
+		http.Redirect(w, r, "/signup", http.StatusSeeOther)
 	}
 }
 
