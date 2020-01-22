@@ -2,6 +2,7 @@ package entity
 
 import (
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
 type Role struct {
@@ -9,7 +10,7 @@ type Role struct {
 	Name string `gorm:"type:varchar(255)"`
 }
 
-type Services struct {
+type Service struct {
 	gorm.Model
 	Name          string `gorm:"type:varchar(255);not null"`
 	ShopID        uint
@@ -21,7 +22,7 @@ type User struct {
 	gorm.Model
 	FullName string `gorm:"type:varchar(255);not null"`
 	Email    string `gorm:"type:varchar(255);not null;unique"`
-	Password string `gorm:"type:varchar(255)"`
+	Password string `gorm:"type:varchar(255);not null"`
 	Phone    string `gorm:"type:varchar(16);not null; unique"`
 	RoleID   uint
 }
@@ -38,24 +39,20 @@ type Shop struct {
 	Website   string `gorm:"type:varchar(255)"`
 	Image     string `gorm:"type:varchar(255)"`
 	UserID    uint
-	Services  []Services
-	OpenHours []OpenHour
+	WeekDayOpenHour uint `gorm:"default:480"`
+	WeekDayCloseHour uint `gorm:"default:1200"`
+	WeekendOpenHour uint `gorm:"default:510"`
+	WeekendCloseHour uint `gorm:"default:1080"`
+	Services  []Service
 }
 
-type OpenHour struct {
-	gorm.Model
-	Day       string `gorm:"type:varchar(3);not null"`
-	StartHour string `gorm:"type:varchar(8);not null"`
-	EndHour   string `gorm:"type:varchar(8);not null"`
-	ShopID    uint
-	Services  []Services
-}
 
-type Appointments struct {
+type Appointment struct {
 	gorm.Model
 	UserID     uint
 	ShopID     uint
 	ServicesID uint
+	AppointmentTime *time.Time
 }
 
 type Session struct {
@@ -70,13 +67,7 @@ type Review struct {
 	gorm.Model
 	UserID uint
 	ShopID uint
-	Review string
-	Reply  Reply
-}
-
-type Reply struct {
-	gorm.Model
-	ReviewID uint
-	ShopID   uint
-	Reply    string
+	Review string `gorm:"type:varchar(1024);not null"`
+	Reply  string `gorm:"type:varchar(1024);not null"`
+	Rating float32 `gorm:"not null"`
 }
