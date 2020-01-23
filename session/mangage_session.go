@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/betsegawlemma/restaurant/rtoken"
+	"rtoken"
 	"github.com/dgrijalva/jwt-go"
 )
 
