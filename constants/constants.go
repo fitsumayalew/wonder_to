@@ -1,0 +1,15 @@
+package constants
+
+const fullnameKey = "fullname"
+const passwordKey = "password"
+const emailKey = "email"
+const phoneKey = "phone"
+const typeKey = "type"
+const confirmPasswordKey = "confirmPassword"
+const shopNameKey = "shopName"
+const addressKey = "address"
+const websiteKey = "website"
+const lngKey = "lng"
+const latKey = "lat"
+const cityKey = "city"
+const csrfKey = "_csrf"
