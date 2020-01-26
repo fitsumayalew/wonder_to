@@ -10,3 +10,4 @@ type ShopRepository interface {
 	DeleteShop(id uint) (*entity.Shop, []error)
 	GetShopByUserID(userID uint) (*entity.Shop, []error)
 }
+

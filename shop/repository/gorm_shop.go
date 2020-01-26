@@ -26,7 +26,7 @@ func (shopRepo *ShopGormRepo) GetShops() ([]entity.Shop, []error) {
 
 func (shopRepo *ShopGormRepo) GetShop(id uint) (*entity.Shop, []error) {
 	shop := entity.Shop{}
-	errs := shopRepo.conn.First(&shop, id).GetErrors()
+	errs := shopRepo.conn.Set("gorm:auto_preload", true).First(&shop, id).GetErrors()
 	if len(errs) > 0 {
 		return nil, errs
 	}

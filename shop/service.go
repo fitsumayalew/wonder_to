@@ -12,3 +12,4 @@ type ShopService interface {
 	DeleteShop(id uint) (*entity.Shop, []error)
 	GetShopByUserID(userID uint) (*entity.Shop, []error)
 }
+
