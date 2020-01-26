@@ -1,0 +1,54 @@
+{{ define "admin.service.layout" }}
+    {{ template "admin.header" . }}
+    {{ template "admin.service.content" . }}
+    {{ template "admin.footer" .}}
+{{ end }}
+
+
+{{ define "admin.service.edit..content"}}
+
+
+    <div class="page-content">
+        <section class="no-padding-bottom" style="height: 700px; overflow-y: auto;">
+            <div class="container-fluid">
+                <form action="#" id="reply-form" method="post">
+                    <h2>Write a Reply</h2>
+                    <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
+                    {{if .ReviewID}}
+                        <input type="hidden" name="review_id" value="{{ .ReviewID }}"/>
+                    {{else}}
+                        <input type="hidden" name="review_id" value='{{ .Values.Get "review_id"}}'/>
+                    {{end}}
+                    {{if .Review.Reply}}
+                        <textarea rows="5" cols="60" name="reply_text" placeholder="Enter Reply Here ..."
+                                  required="required">{{.Review.Reply}}</textarea><br>
+                    {{else}}
+                        <textarea rows="5" cols="60" name="reply_text" placeholder="Enter Reply Here ..."
+                                  required="required">{{.Values.Get "reply_text"}}</textarea><br>
+
+                    {{end}}
+
+                    <span>
+                        {{with .VErrors.Get "reply_text" }}
+                            <label class="text-danger">{{ . }}</label>
+                        {{end}}
+                            </span>
+
+
+                    <input name="recover-submit" class="btn btn-lg btn-primary btn-block"
+                            {{if eq .Review.Reply ""}}
+                                value="Send"
+                            {{else}}
+                                value="Update"
+                            {{end}}
+                           type="submit"><br/><br/>
+
+
+                </form>
+            </div>
+
+        </section>
+    </div>
+
+
+{{end}}

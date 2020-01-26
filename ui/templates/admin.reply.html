@@ -1,0 +1,107 @@
+{{ define "admin.reviews.layout" }}
+    {{ template "admin.header" . }}
+    {{ template "admin.reviews.content" . }}
+    {{ template "admin.footer" .}}
+{{ end }}
+
+{{ define "admin.reviews.content"}}
+
+    <div class="modal fade" id="reply" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Shave</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Message:</label>
+                        <textarea class="form-control" id="message-text" style="border-color: #F98E1D;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" style="background-color: #F98E1D; color: white;">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <section class="no-padding-bottom" style="height: 700px; overflow-y: auto;">
+            <div class="container-fluid">
+                <br/>
+                {{/*                <select name="date" class="date_dropdown"*/}}
+                {{/*                        style="margin-bottom: 10px; background-color: #F98E1D; color: white; border-radius: 4px; border-color: #F98E1D; width: 120px;">*/}}
+                {{/*                    <option value="volvo">Date</option>*/}}
+                {{/*                    <option value="saab">Saab</option>*/}}
+                {{/*                    <option value="fiat">Fiat</option>*/}}
+                {{/*                    <option value="audi">Audi</option>*/}}
+                {{/*                </select> */}}
+                {{ range .Reviews }}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="checklist-block block">
+                                <div class="messages-block">
+                                    <div class="row">
+                                        <div class="messages col-lg-2">
+                                            <a href="#" class="message align-items-center">
+                                                {{if eq .User.Image ""}}
+                                                <div class="profile"><img src="/assets/img/avatar-0.jpg" alt="..."
+                                                                          class="img-fluid">
+                                                    {{else}}
+                                                    <div class="profile"><img src='{{.User.Image}}' alt="..."
+                                                                              class="img-fluid">
+                                                        {{end}}
+                                                    </div>
+                                                    <div class="content"><strong class="d-block"
+                                                                                 style="font-size: 14px; font-weight: 600;">{{ .User.FullName }}</strong><strong
+                                                                class="d-block"
+                                                                style="font-size: 12px">56
+                                                            Reviews</strong></div>
+                                            </a>
+                                        </div>
+                                        <div class="messages col-lg-10">
+                                            <a href="#" class="message align-items-center">
+                                                <div class="row">
+                                                    <div class="col-lg-1">
+                                                        <span style="color: #F98E1D;">{{ .Rating }}</span>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <span style="color: rgb(247, 187, 123);">{{ .Model.CreatedAt }}</span>
+                                                    </div>
+                                                </div>
+                                                <br/>
+                                                <div class="content"><strong class="d-block"
+                                                                             style="font-size: 14px; font-weight: 600;"></strong><span
+                                                            class="d-block"
+                                                            style="font-size: 14px; font-weight: 600;">{{ .Review }}</span>
+                                                </div>
+                                            </a>
+
+                                            {{if  eq .Reply ""}}
+                                                <div class="d-flex flex-row-reverse">
+
+                                                    <button class="p-2" data-toggle="modal" data-target="#reply"
+                                                            style="background-color: transparent; border-color: transparent;color: #F98E1D; font-size: 16px;">
+                                                        <span style=" font-weight: 700;">Write a Reply</span>
+                                                    </button>
+                                                </div>
+                                            {{end}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{else}}
+                    <span style="color: #F98E1D; font-weight: 700; font-size: 20px;margin-bottom: 8px;">You don't have any Reviews Yet!</span>
+                    <br/>
+                {{ end }}
+            </div>
+
+        </section>
+    </div>
+
+{{end}}
