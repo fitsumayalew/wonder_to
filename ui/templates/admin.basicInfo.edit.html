@@ -1,102 +1,208 @@
-{{ define "admin.basic.layout" }}
+{{ define "admin.basic.edit.layout" }}
     {{ template "admin.header" . }}
     {{ template "admin.basic.edit.content" . }}
     {{ template "admin.footer" .}}
 {{ end }}
 
+
 {{ define "admin.basic.edit.content"}}
 
+    <div class="page-content">
+        <section class="no-padding-bottom" style="height: 1000px; overflow-y: auto;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <form action="#" method="POST" enctype="multipart/form-data">
+                            {{if .CSRF}}
+                                <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
+                            {{else}}
+                                <input type="hidden" name="_csrf" value="{{.Values.Get "_csrf"}}"/>
+                            {{end}}
 
-                    <form action="/signup" method="POST">
-                        <h2>Create Account</h2>
-                        <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
-                        <p class="lead ">x-cut</p>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-phone icon_border"></i></span>
-                                <input type="text" class="form-control " name="phone" placeholder="Phone Number"
-                                       required="required " size="10" value='{{ .Values.Get "phone" }}'/>
+                            <div class="contact_info">
                                 <br/>
-                                <span>
+                                <span style="color: #F98E1D; font-weight: 700; font-size: 20px;margin-bottom: 8px;">Contact Info</span><br/>
+
+
+                                <div class="form-group">
+                                    <span style="color: rgb(247, 187, 123);">Name:</span><br/>
+                                    <div class="input-group">
+
+                                        <input type="text" class="form-control " name="shopName" placeholder="Shop Name"
+                                               required="required " value='{{ .Values.Get "shopName" }}'/>
+
+                                    </div>
+                                    {{with .VErrors.Get "shopName" }}
+                                        <label class="text-danger">{{ . }}</label>
+                                    {{end}}
+                                </div>
+
+                                <div class="form-group">
+                                    <span style="color: rgb(247, 187, 123);">Phone:</span><br/>
+
+                                    <div class="input-group">
+                                        <input type="text" class="form-control " name="phone" placeholder="Phone"
+                                               required="required " size="10" value='{{ .Values.Get "phone" }}'/>
+
+                                    </div>
                                     {{with .VErrors.Get "phone" }}
                                         <label class="text-danger">{{ . }}</label>
                                     {{end}}
-                                </span>
-                            </div>
-                        </div>
+                                </div>
 
-                        <div class="form-group ">
-                            <div class="input-group ">
-                                <span class="input-group-addon "><i class="fa fa-paper-plane icon_border"></i></span>
-                                <input type="email" class="form-control " name="email" placeholder="Email Address "
-                                       required="required " value='{{ .Values.Get "email" }}'>
-                                <br/>
-                                <span>
-                                    {{with .VErrors.Get "email" }}
+
+                                <div class="form-group">
+                                    <span style="color: rgb(247, 187, 123);">City:</span><br/>
+
+                                    <div class="input-group">
+                                        <input type="text" class="form-control " name="city" placeholder="City"
+                                               required="required " value='{{ .Values.Get "city" }}'/>
+
+                                    </div>
+                                    {{with .VErrors.Get "city" }}
                                         <label class="text-danger">{{ . }}</label>
                                     {{end}}
-                                </span>
-                            </div>
-                        </div>
+                                </div>
 
+                                <div class="form-group">
+                                    <span style="color: rgb(247, 187, 123);">Address:</span><br/>
 
-                        <div class="form-group ">
-                            <div class="input-group ">
-                                <span class="input-group-addon "><i class="fa fa-lock icon_border"></i></span>
-                                <input type="text" class="form-control " name="fullname" placeholder="Full Name"
-                                       required="required" value='{{ .Values.Get "fullname" }}'><br/>
-                                <span>
-                                    {{with .VErrors.Get "fullname" }}
+                                    <div class="input-group">
+                                        <input type="text" class="form-control " name="address" placeholder="Address"
+                                               required="required " value='{{ .Values.Get "address" }}'/>
+
+                                    </div>
+                                    {{with .VErrors.Get "address" }}
                                         <label class="text-danger">{{ . }}</label>
                                     {{end}}
-                                </span>
-                            </div>
-                        </div>
+                                </div>
 
-
-                        <div class="form-group ">
-                            <div class="input-group ">
-                                <span class="input-group-addon "><i class="fa fa-lock icon_border"></i></span>
-                                <input type="password" class="form-control " name="password" placeholder="Password"
-                                       required="required"><br/>
-                                <span>
-                                    {{with .VErrors.Get "password" }}
+                                <div class="form-group">
+                                    <span style="color: rgb(247, 187, 123);">Website:</span><br/>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control " name="website" placeholder="Webiste"
+                                               value='{{ .Values.Get "website" }}'/>
+                                    </div>
+                                    {{with .VErrors.Get "website" }}
                                         <label class="text-danger">{{ . }}</label>
                                     {{end}}
-                                </span>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div id="map" style="width: 100%;height: 300px;"></div>
+                                    </div>
+
+                                </div>
+                                <input hidden type="text" id="lng" class="form-control" name="lng"
+                                       placeholder="Longitude"
+                                       required="required" value='{{ .Values.Get "lng" }}'><br/>
+                                <input hidden type="text" id="lat" class="form-control" name="lat"
+                                       placeholder="Latitude"
+                                       required="required" value='{{ .Values.Get "lat" }}'>
+
                             </div>
-                        </div>
-                        <div class="form-group ">
-                            <div class="input-group ">
-                                <span class="input-group-addon">
-                                        <i class="fa fa-lock icon_border"></i>
-                                    </span>
-                                <input type="password" class="form-control " name="confirmPassword"
-                                       placeholder="Confirm Password " required="required"><br/>
-                                <span>
-                                    {{with .VErrors.Get "confirmPassword" }}
+
+                            <span style="color: #F98E1D; font-weight: 700; font-size: 20px;margin-bottom: 8px;">Open Hours</span><br/>
+
+                            <table>
+
+                                <tr>
+                                    <td>
+                                        <span style="color: rgb(247, 187, 123);">Mon-Fri: </span>
+                                    </td>
+                                    <td>
+                                        <input class="form-control " name="weekdays_start" type="time" value='{{ .Values.Get "weekdays_start" }}'>
+
+                                    </td>
+                                    <td>
+                                        <span class="input-group-addon" style="color: rgb(247, 187, 123);">-</span>
+
+                                    </td>
+                                    <td>
+                                        <input class="form-control " name="weekdays_end" value='{{ .Values.Get "weekdays_end" }}' type="time">
+
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <span style="color: rgb(247, 187, 123);">Sat-Sun: </span>
+                                    </td>
+                                    <td>
+                                        <input class="form-control " name="weekend_start" value='{{ .Values.Get "weekend_start" }}' type="time">
+
+                                    </td>
+                                    <td>
+                                        <span class="input-group-addon" style="color: rgb(247, 187, 123);">-</span>
+
+                                    </td>
+                                    <td>
+                                        <input class="form-control " name="weekend_end" value='{{ .Values.Get "weekend_end" }}' type="time">
+
+                                    </td>
+                                </tr>
+                                {{with .VErrors.Get "openhours" }}
+                                    <tr>
                                         <label class="text-danger">{{ . }}</label>
-                                    {{end}}
-                                </span>
-                            </div>
-                        </div>
+                                    </tr>
+                                {{end}}
+                            </table>
+                            <input type="file" name="image_file">
+                            <br>
+                            <button type="submit" class="btn btn-primary btn-block btn-lg">Save Changes</button>
+                            <br>
+                        </form>
 
-                        <div class="form-group ">
-                            <div class="input-group ">
-                                <span class="input-group-addon">
-                                        <i class="fa fa-lock icon_border"></i>
-                                    </span>
-                                <input type="radio" name="type" value="customer" checked="checked">Customer<br>
-                                <input type="radio" name="type" value="barbershop">BarberShop<br>
-                                <br/>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 
-                            </div>
-                        </div>
+    <script>
+        var map;
+        var marker;
+
+        function initMap() {
+            var myLatLng = {lat: {{ .Values.Get "lat" }}-0, lng: {{ .Values.Get "lng" }}-0};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center: {lat: {{ .Values.Get "lat" }}-0, lng: {{ .Values.Get "lng" }}-0}
+            });
+
+            map.addListener('click', function (e) {
+                placeMarkerAndPanTo(e.latLng, map);
+            });
+
+            marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map
+            });
 
 
+        }
 
-                        <button type="submit" class="btn btn-primary btn-block btn-lg">Save Changes</button>
-                        <br>
-                    </form>
+        function placeMarkerAndPanTo(latLng, map) {
+            if (marker == null) {
+                marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map
+                });
+            } else {
+                marker.setPosition(latLng);
+            }
+            document.getElementById("lat").value = marker.position.lat()
+            console.log(marker.position.lat());
+            document.getElementById("lng").value = marker.position.lng()
+            map.panTo(latLng);
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJ9CyueT7vo_v4nILzwDNMAOY7zGzn2ZE&callback=initMap"
+            async defer></script>
+
+
 
 {{end}}

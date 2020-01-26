@@ -93,11 +93,10 @@ $(document).ready(function () {
     });
 
 
-
     // ------------------------------------------------------- //
     // Bar Chart
     // ------------------------------------------------------ //
-    var BARCHARTEXMPLE    = $('#barChartExample1');
+    var BARCHARTEXMPLE = $('#barChartExample1');
     var barChartExample = new Chart(BARCHARTEXMPLE, {
         type: 'bar',
         options: {
@@ -275,7 +274,7 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Bar Chart
     // ------------------------------------------------------ //
-    var BARCHARTEXMPLE    = $('#barChartExample2');
+    var BARCHARTEXMPLE = $('#barChartExample2');
     var barChartExample = new Chart(BARCHARTEXMPLE, {
         type: 'bar',
         options: {
@@ -491,21 +490,21 @@ $(document).ready(function () {
     var barChartHome = new Chart(BARCHART1, {
         type: 'bar',
         options:
-        {
-            scales:
             {
-                xAxes: [{
-                    display: false,
-                    barPercentage: 0.2
-                }],
-                yAxes: [{
+                scales:
+                    {
+                        xAxes: [{
+                            display: false,
+                            barPercentage: 0.2
+                        }],
+                        yAxes: [{
+                            display: false
+                        }],
+                    },
+                legend: {
                     display: false
-                }],
+                }
             },
-            legend: {
-                display: false
-            }
-        },
         data: {
             labels: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
             datasets: [
@@ -551,21 +550,21 @@ $(document).ready(function () {
     var barChartHome = new Chart(BARCHART1, {
         type: 'bar',
         options:
-        {
-            scales:
             {
-                xAxes: [{
-                    display: false,
-                    barPercentage: 0.2
-                }],
-                yAxes: [{
+                scales:
+                    {
+                        xAxes: [{
+                            display: false,
+                            barPercentage: 0.2
+                        }],
+                        yAxes: [{
+                            display: false
+                        }],
+                    },
+                legend: {
                     display: false
-                }],
+                }
             },
-            legend: {
-                display: false
-            }
-        },
         data: {
             labels: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
             datasets: [
@@ -608,7 +607,7 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Pie Chart
     // ------------------------------------------------------ //
-    var PIECHARTEXMPLE    = $('#visitPieChart');
+    var PIECHARTEXMPLE = $('#visitPieChart');
     var pieChartExample = new Chart(PIECHARTEXMPLE, {
         type: 'pie',
         options: {
@@ -640,7 +639,7 @@ $(document).ready(function () {
                         "#a678eb"
                     ]
                 }]
-            }
+        }
     });
 
     var pieChartExample = {

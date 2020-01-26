@@ -8,11 +8,11 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Line Chart Custom 1
     // ------------------------------------------------------ //
-    var LINECHARTEXMPLE   = $('#lineChartCustom1');
+    var LINECHARTEXMPLE = $('#lineChartCustom1');
     var lineChartExample = new Chart(LINECHARTEXMPLE, {
         type: 'line',
         options: {
-            legend: {labels:{fontColor:"#777", fontSize: 12}},
+            legend: {labels: {fontColor: "#777", fontSize: 12}},
             scales: {
                 xAxes: [{
                     display: false,
@@ -86,7 +86,6 @@ $(document).ready(function () {
     });
 
 
-
     // ------------------------------------------------------- //
     // Bar Chart Custom 1
     // ------------------------------------------------------ //
@@ -94,25 +93,25 @@ $(document).ready(function () {
     var barChartHome = new Chart(BARCHART1, {
         type: 'bar',
         options:
-        {
-            scales:
             {
-                xAxes: [{
-                    display: true,
-                    barPercentage: 0.2
-                }],
-                yAxes: [{
-                    ticks: {
-                        max: 100,
-                        min: 0
+                scales:
+                    {
+                        xAxes: [{
+                            display: true,
+                            barPercentage: 0.2
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                max: 100,
+                                min: 0
+                            },
+                            display: false
+                        }],
                     },
+                legend: {
                     display: false
-                }],
+                }
             },
-            legend: {
-                display: false
-            }
-        },
         data: {
             labels: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
             datasets: [
@@ -161,25 +160,25 @@ $(document).ready(function () {
     var barChartHome = new Chart(BARCHART1, {
         type: 'bar',
         options:
-        {
-            scales:
             {
-                xAxes: [{
-                    display: true,
-                    barPercentage: 0.2
-                }],
-                yAxes: [{
-                    ticks: {
-                        max: 100,
-                        min: 0
+                scales:
+                    {
+                        xAxes: [{
+                            display: true,
+                            barPercentage: 0.2
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                max: 100,
+                                min: 0
+                            },
+                            display: false
+                        }],
                     },
+                legend: {
                     display: false
-                }],
+                }
             },
-            legend: {
-                display: false
-            }
-        },
         data: {
             labels: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
             datasets: [
@@ -389,11 +388,10 @@ $(document).ready(function () {
     });
 
 
-
     // ------------------------------------------------------- //
     // Bar Chart
     // ------------------------------------------------------ //
-    var BARCHARTEXMPLE    = $('#barChartCustom3');
+    var BARCHARTEXMPLE = $('#barChartCustom3');
     var barChartExample = new Chart(BARCHARTEXMPLE, {
         type: 'bar',
         options: {
@@ -487,7 +485,7 @@ $(document).ready(function () {
     // ------------------------------------------------------- //
     // Pie Chart Custom 1
     // ------------------------------------------------------ //
-    var PIECHARTEXMPLE    = $('#pieChartCustom1');
+    var PIECHARTEXMPLE = $('#pieChartCustom1');
     var pieChartExample = new Chart(PIECHARTEXMPLE, {
         type: 'pie',
         options: {
@@ -520,13 +518,12 @@ $(document).ready(function () {
                         "#a678eb"
                     ]
                 }]
-            }
+        }
     });
 
     var pieChartExample = {
         responsive: true
     };
-
 
 
     // ------------------------------------------------------- //
@@ -570,7 +567,6 @@ $(document).ready(function () {
     });
 
 
-
     // ------------------------------------------------------- //
     // Polar Chart
     // ------------------------------------------------------ //
@@ -599,7 +595,7 @@ $(document).ready(function () {
             }
         }
     };
-    var POLARCHARTEXMPLE  = $('#polarChartCustom');
+    var POLARCHARTEXMPLE = $('#polarChartCustom');
     var polarChartExample = new Chart(POLARCHARTEXMPLE, {
         type: 'polarArea',
         options: chartOptions,
@@ -633,7 +629,6 @@ $(document).ready(function () {
     };
 
 
-
     // ------------------------------------------------------- //
     // Radar Chart
     // ------------------------------------------------------ //
@@ -656,7 +651,7 @@ $(document).ready(function () {
             position: 'left'
         }
     };
-    var RADARCHARTEXMPLE  = $('#radarChartCustom');
+    var RADARCHARTEXMPLE = $('#radarChartCustom');
     var radarChartExample = new Chart(RADARCHARTEXMPLE, {
         type: 'radar',
         options: chartOptions,
@@ -691,11 +686,6 @@ $(document).ready(function () {
     var radarChartExample = {
         responsive: true
     };
-
-
-
-
-
 
 
 });

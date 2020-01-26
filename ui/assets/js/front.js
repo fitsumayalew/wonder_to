@@ -4,13 +4,13 @@ $(function () {
     // Tooltips init
     // ------------------------------------------------------ //    
 
-    $('[data-toggle="tooltip"]').tooltip()        
+    $('[data-toggle="tooltip"]').tooltip()
 
     // ------------------------------------------------------- //
     // Universal Form Validation
     // ------------------------------------------------------ //
 
-    $('.form-validate').each(function() {  
+    $('.form-validate').each(function () {
         $(this).validate({
             errorElement: "div",
             errorClass: 'is-invalid',
@@ -22,8 +22,7 @@ $(function () {
                 //console.log(element);
                 if (element.prop("type") === "checkbox") {
                     error.insertAfter(element.siblings("label"));
-                } 
-                else {
+                } else {
                     error.insertAfter(element);
                 }
             }
@@ -37,7 +36,9 @@ $(function () {
     var materialInputs = $('input.input-material');
 
     // activate labels for prefilled values
-    materialInputs.filter(function() { return $(this).val() !== ""; }).siblings('.label-material').addClass('active');
+    materialInputs.filter(function () {
+        return $(this).val() !== "";
+    }).siblings('.label-material').addClass('active');
 
     // move label on focus
     materialInputs.on('focus', function () {
@@ -65,7 +66,7 @@ $(function () {
         adjustFooter();
     });
 
-    $(window).on('resize', function(){
+    $(window).on('resize', function () {
         adjustFooter();
     })
 

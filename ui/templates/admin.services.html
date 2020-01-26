@@ -1,0 +1,51 @@
+{{ define "admin.service.layout" }}
+    {{ template "admin.header" . }}
+    {{ template "admin.service.content" . }}
+    {{ template "admin.footer" .}}
+{{ end }}
+
+
+{{ define "admin.service.content"}}
+
+
+<!-- Sidebar Navigation end-->
+<div class="page-content">
+    <section class="no-padding-bottom">
+        <div class="container-fluid">
+            <br/>
+            <div class="d-flex flex-row-reverse">
+                <button class="title p-2" data-toggle="modal" data-target="#addHaircut"
+                        style="background-color: transparent; border-color: transparent; color: rgb(221, 215, 215);">
+                    <strong><i class="fas fa-plus"></i>Add New Service</strong></button>
+            </div>
+            <span style="color: #F98E1D; font-weight: 700; font-size: 20px;margin-bottom: 8px;">Services</span><br/>
+            <div class="row">
+                {{ range . }}
+                    <div class="col-lg-3 col-sm-4">
+                        <div class="checklist-block block" style="padding: 0px; border-radius: 8px;">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12">
+                                    <img src="../../assets/img/{{ .Image }}" class="img-fluid">
+                                </div>
+                            </div>
+                            <div style="padding: 10px;">
+                                <span class="" style="font-weight: 600;">{{ .Name}}</span><br/>
+                                <span>{{ .Price }}</span><br/>
+                                <span style="padding-bottom: 10px;">{{ .EstimatedTime }}</span><br/>
+                                <a href='/admin/services/update?id={{.Model.ID}}' style="background-color: #F98E1D; border-color: #F98E1D; color: white; font-weight: 800; width: 60px;border-radius: 5px; margin-right: 75px;">
+                                    Edit
+                                </a>
+                                <a href='/admin/services/delete?id={{.Model.ID}}'style="background-color: #DB6574; border-color: rgb(218, 85, 102); color: white; font-weight: 800; width: 70px;border-radius: 5px;">
+                                    Delete
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                {{ end }}
+            </div>
+        </div>
+    </section>
+</div>
+
+{{end}}

@@ -1,11 +1,11 @@
-{{ define "admin.service.new.layout" }}
+{{ define "admin.service.update.layout" }}
     {{ template "admin.header" . }}
-    {{ template "admin.service.new.content" . }}
+    {{ template "admin.service.updatd.content" . }}
     {{ template "admin.footer" .}}
 {{ end }}
 
 
-{{ define "admin.service.new.content"}}
+{{ define "admin.service.update.content"}}
 
 
     <div class="page-content">
@@ -14,18 +14,15 @@
                 <form action="#" id="service-form" method="post" enctype="multipart/form-data">
                     <h2>Write a Reply</h2>
                     <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
-{{/*                    {{if .ReviewID}}*/}}
-{{/*                        <input type="hidden" name="review_id" value="{{ .ReviewID }}"/>*/}}
-{{/*                    {{else}}*/}}
-{{/*                        <input type="hidden" name="review_id" value='{{ .Values.Get "review_id"}}'/>*/}}
-{{/*                    {{end}}*/}}
+
+                        <input type="hidden" name="review_id" value='{{ .Values.Get  "id"}}'/>
 
                     <div class="form-group">
                         <span style="color: rgb(247, 187, 123);">Name:</span><br/>
                         <div class="input-group">
-
+                            {{ .Values.Get "name" }}
                             <input type="text" class="form-control " name="name" placeholder="Name"
-                                   required="required " value='{{ .Values.Get "Name" }}'/>
+                                   required="required " value='{{ .Values.Get "name" }}'/>
 
                         </div>
                         {{with .VErrors.Get "Name" }}
@@ -61,7 +58,7 @@
                     </div>
 
                     <span>Image: </span><input type="file" name="image_file"><br>
-                    <input name="a" class="btn btn-lg btn-primary btn-block"  type="submit"><br/><br/>
+                    <input name="a" class="btn btn-lg btn-primary btn-block" value="Update"  type="submit"><br/><br/>
 
 
                 </form>
