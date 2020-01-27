@@ -30,14 +30,43 @@ var authorities = authority{
 	},
 	"/admin/reviews": permission{
 		roles:   []string{"ADMIN"},
-		methods: []string{"GET"},
+		methods: []string{"GET","POST"},
 	},
 	"/admin/reply": permission{
 		roles:   []string{"ADMIN"},
 		methods: []string{"GET", "POST"},
 	},
-
+	"/admin/basicInfoEdit": permission{
+		roles:   []string{"ADMIN"},
+		methods: []string{"GET","POST"},
+	},
+	"/admin/services": permission{
+		roles:   []string{"ADMIN"},
+		methods: []string{"GET","POST"},
+	},
+	"/admin/appointments": permission{
+		roles:   []string{"ADMIN"},
+		methods: []string{"GET","POST"},
+	},
+	"/admin/services/new": permission{
+		roles:   []string{"ADMIN"},
+		methods: []string{"GET","POST"},
+	},
+	"/admin/services/update": permission{
+		roles:   []string{"ADMIN"},
+		methods: []string{"GET","POST"},
+	},
+	"/admin/services/barbershop": permission{
+		roles:   []string{"USER"},
+		methods: []string{"POST"},
+	},
+	"/admin/services/delete": permission{
+		roles:   []string{"ADMIN"},
+		methods: []string{"GET"},
+	},
 }
+
+
 
 // HasPermission checks if a given role has permission to access a given route for a given method
 func HasPermission(path string, role string, method string) bool {
