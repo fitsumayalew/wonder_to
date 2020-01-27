@@ -29,18 +29,6 @@ func NewClaims(sessionId string,expire int64) jwt.Claims {
 
 
 
-// MakeClaims returns claims used for generating jwt tokens
-func MakeClaims(sessionId string,expire int64) jwt.Claims {
-
-	return CustomClaims{
-		sessionId,
-		jwt.StandardClaims{
-			ExpiresAt: expire,
-		},
-	}
-}
-
-
 ///Validate, parse, returns claim
 func GetSessionIdFromToken(tkn string,keyFunc jwt.Keyfunc) string{
 	token,err:=jwt.Parse(tkn,keyFunc)
