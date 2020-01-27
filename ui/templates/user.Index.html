@@ -1,0 +1,99 @@
+{{ define "user.index.layout" }}
+    {{ template "user.header" . }}
+    {{ template "index.content" . }}
+    {{ template "user.footer" .}}
+{{ end }}
+
+{{ define "index.content"}}
+
+<div class="d-flex align-items-stretch">
+        <!-- Sidebar Navigation-->
+        <!-- Sidebar Navigation end-->
+        <div class="form-group container" style="margin-top: 10px; margin-bottom: 10px;">
+            <br/>
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-10">
+
+                    <form action="/search" method="GET">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="address" placeholder="Search for Barbershop..." required="required" style="background-color: #999999; border-radius: 50px 0px 0px 50px; color: #22252A; font-weight: 600;">
+                        <button type="submit"  class="input-group-addon btn" style="height: 40px; background-color: rgb(68, 67, 67); width: 78px; border-radius: 0px 50px 50px 0px;border-color: #5c5b5b;"><span style="font-weight: 700; padding-top: 0px; padding-left: 0px; font-size: 19px; color: #F98E1D;">FIND</span></button>
+                    </div>
+                    </form>
+                </div>
+            </div><br/>
+            <section class=" d-flex justify-content-center">
+                <div class="container-fluid">
+                    <form action="/search" method="GET">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div id="map" style="margin: auto;width: 80%;height: 450px;"></div>
+                            </div>
+                            <button type="submit"  class="input-group-addon btn" style="height: 40px; background-color: rgb(68, 67, 67); width: 100px;margin-left:500px; border-radius: 0px 50px 50px 0px;border-color: #5c5b5b;"><span style="font-weight: 700; padding-top: 0px; padding-left: 0px; font-size: 19px; color: #F98E1D;">FIND</span></button>
+
+                        </div>
+                        <input hidden type="text" id="lng" class="form-control" name="lng"
+                               placeholder="Longitude"
+                               required="required"><br/>
+                        <input hidden type="text" id="lat" class="form-control" name="lat"
+                               placeholder="Latitude"
+                               required="required">
+
+                        <br>
+                        <br>
+                        <br>
+
+
+
+                    </form>
+                </div>
+            </section>
+
+        </div>
+
+
+    <script>
+        var map;
+        var marker;
+
+        function initMap() {
+            var myLatLng = {lat: 9.003060113076137, lng: 38.76410185113568};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center: {lat: 9.003060113076137, lng: 38.76410185113568}
+            });
+
+            map.addListener('click', function (e) {
+                placeMarkerAndPanTo(e.latLng, map);
+            });
+
+            marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map
+            });
+
+
+        }
+
+        function placeMarkerAndPanTo(latLng, map) {
+            if (marker == null) {
+                marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map
+                });
+            } else {
+                marker.setPosition(latLng);
+            }
+            document.getElementById("lat").value = marker.position.lat()
+            console.log(marker.position.lat());
+            document.getElementById("lng").value = marker.position.lng()
+            map.panTo(latLng);
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJ9CyueT7vo_v4nILzwDNMAOY7zGzn2ZE&callback=initMap"
+            async defer></script>
+
+
+
+{{end}}

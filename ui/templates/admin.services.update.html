@@ -12,15 +12,15 @@
         <section class="no-padding-bottom" style="height: 700px; overflow-y: auto;">
             <div class="container-fluid">
                 <form action="#" id="service-form" method="post" enctype="multipart/form-data">
-                    <h2>Write a Reply</h2>
+                    <h2>Edit Service</h2>
                     <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
 
                         <input type="hidden" name="review_id" value='{{ .Values.Get  "id"}}'/>
 
                     <div class="form-group">
-                        <span style="color: rgb(247, 187, 123);">Name:</span><br/>
+                        <span style="color: rgb(247, 187, 123);">Name:
+</span><br/>
                         <div class="input-group">
-                            {{ .Values.Get "name" }}
                             <input type="text" class="form-control " name="name" placeholder="Name"
                                    required="required " value='{{ .Values.Get "name" }}'/>
 

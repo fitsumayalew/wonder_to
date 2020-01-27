@@ -12,13 +12,6 @@
         <div class="no-padding-bottom" style="height: 800px; overflow-y: auto;">
             <div class="container-fluid">
                 <br/>
-                <select name="date" class="date_dropdown"
-                        style="margin-bottom: 10px; background-color: #F98E1D; color: white; border-radius: 4px; border-color: #F98E1D; width: 120px;">
-                    <option value="volvo">Date</option>
-                    <option value="saab">Saab</option>
-                    <option value="fiat">Fiat</option>
-                    <option value="audi">Audi</option>
-                </select>
                 <div class="row">
                     {{ range . }}
                         <div class="col-lg-6">
@@ -27,46 +20,22 @@
                                     <div class="row">
 
                                         <div class="messages col-lg-2">
-                                            <a href="#" class="message align-items-center">
-                                                <div class="profile"><img src="img/avatar-3.jpg" alt="..."
+                                                <div class="profile"><img src="../assets/img/avatar-0.jpg" alt="..."
                                                                           class="img-fluid">
                                                 </div>
                                                 <div class="content"><strong class="d-block"
-                                                                             style="font-size: 14px; font-weight: 600; padding-top: 8px;">{{ .name }}</strong>
+                                                                             style="font-size: 14px; font-weight: 600; padding-top: 8px;">{{ .User.FullName }}</strong>
                                                 </div>
-                                            </a>
                                         </div>
                                         <div class="messages col-lg-10">
                                             <a href="#" class="message align-items-center">
                                                 <div class="row">
                                                     <div class="col-lg-7">
-                                                        <span style="color: rgb(247, 187, 123);">{{ .date }}<span
-                                                                    style="color: rgb(247, 187, 123);">{{ .time }}</span></span>
-                                                        <div class="content"><strong class="d-block"
-                                                                                     style="font-size: 14px; font-weight: 600;"></strong><span
-                                                                    class="d-block"
-                                                                    style="font-size: 14px; font-weight: 600;">{{ .haircut_type}}</span>
-                                                        </div>
-                                                        <div class="content"><strong class="d-block"
-                                                                                     style="font-size: 14px; font-weight: 600;"></strong><span
-                                                                    class="d-block"
-                                                                    style="font-size: 14px; font-weight: 600;">{{ .price }}</span>
-                                                        </div>
-                                                        <div class="content"><strong class="d-block"
-                                                                                     style="font-size: 14px; font-weight: 600;"></strong><span
-                                                                    class="d-block"
-                                                                    style="font-size: 14px; font-weight: 600;">{{ .estimated_time }}</span>
-                                                        </div>
+                                                        <span style="color: rgb(247, 187, 123);">Date:<span
+                                                                    style="color: rgb(247, 187, 123);">{{ .AppointmentTime }}</span></span>
+
                                                     </div>
-                                                    <!-- <div class="col-lg-6">
-                                                    <span style="color: rgb(247, 187, 123);">10:30 AM to 11:50 AM</span>
-                                                </div> -->
-                                                    <div class="col-lg-5 float-lg-right">
-                                                        <div class="" style="padding-top: 15px;">
-                                                            <span class=""
-                                                                  style="color: rgb(240, 145, 45); font-size: 20px;">{{ .status }}</span>
-                                                        </div>
-                                                    </div>
+
                                                 </div>
                                                 <br/>
                                             </a>

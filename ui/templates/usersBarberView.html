@@ -1,0 +1,189 @@
+{{ define "barbershop.layout" }}
+    {{ template "user.header" . }}
+    {{ template "barbershop.content" . }}
+    {{ template "user.footer" .}}
+{{ end }}
+
+{{ define "barbershop.content"}}
+
+
+
+    <div class="d-flex align-items-center">
+                    <div class="row">
+                        {{ range .Services }}
+                            <div class="col-lg-3">
+                                <img src="salon.jpg" class="img-fluid" height="300px"
+                                     style="padding: 0px; margin: 0px"><br/><br/>
+                                <div class="row" style="margin-bottom: 15px;">
+                                    <div class="col-lg-4">
+                                        <span style="font-size: 17px; font-weight: 600; margin-left: 22; color: #F98E1D;">Service</span><br/>
+                                        <span style="margin-left: 19; font-size: 15px;">{{ .Name }}</span>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <span style="font-size: 17px; font-weight: 600; margin-left: 22; color: #F98E1D;">Price</span><br/>
+                                        <span style="margin-left: 15; font-size: 15px;">{{ .Price }} ETB</span>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <span style="font-size: 17px; font-weight: 600; margin-left: 22; color: #F98E1D;">ETC</span><br/>
+                                        <span style="margin-left: 19px; font-size: 15px;">{{ .EstimatedTime }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {{ end }}
+                    </div>
+    </div>
+
+
+    <hr style="border: 1px solid #696969; width: 80%; margin-bottom: 20px; margin-top: 0px;">
+
+    {{with .Shop}}
+
+    <div class="row d-flex justify-content-center ">
+        <div class="col-lg-3 justify-content-center ">
+            <div class="messages-block block ">
+                <span>Rating: {{.Rating}}</span>
+            </div>
+            <div class="messages-block block ">
+                <div class="open_hours ">
+                        <span style="color: #F98E1D; font-weight: 700; font-size: 20px;margin-bottom: 8px; ">Open Hours</span>
+                        <br/>
+                        <table>
+
+                            <tr>
+                                <td>
+                                    <span style="color: rgb(247, 187, 123);">Mon-Fri: </span>
+                                </td>
+                                <td>
+                                    {{ processDate .WeekDayOpenHour }} - {{ processDate .WeekDayCloseHour }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span style="color: rgb(247, 187, 123);">Sat-Sun: </span>
+                                </td>
+                                <td>
+                                    {{ processDate .WeekendOpenHour }} - {{ processDate .WeekendCloseHour }}
+                                </td>
+                            </tr>
+                        </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 justify-content-center ">
+            <div>
+                                <span class="title " style="padding-bottom: 0px; margin-bottom: 15px; "><strong
+                                            style="font-size: 22px; color: #F98E1D; ">{{ .Name }} Barbershop<i
+                                                style="color:rgb(9, 171, 224); padding-left: 5px; "></i></strong></span><br/>
+    {{end}}
+
+    <span style="font-size: 18px; margin-bottom: 7px; ">Reviews</span>
+            </div>
+            <div class="messages-block block "
+                 style="overflow-y: auto; height: 200px; padding-top: 20px; padding-bottom: 20px; ">
+                {{ range .Reviews }}
+                    <div class="row ">
+                        <div class="messages col-lg-2 ">
+                            <a href="# " class="message align-items-center ">
+                                <div class="profile "><img src="{{ .User.Image }} " alt="... "
+                                                           class="img-fluid ">
+                                </div>
+                                <div class="content "><strong class="d-block "
+                                                              style="font-size: 14px; font-weight: 600; ">{{ .User.FullName }}</strong><strong
+                                            class="d-block "
+                                            style="font-size: 12px ">{{ .User.NumberOfReviews }}
+                                        Reviews</strong></div>
+                            </a>
+                        </div>
+                        <div class="messages col-lg-10 ">
+                            <a href="# " class="message align-items-center ">
+                                <div class="row ">
+                                    <div class="col-lg-1 ">
+                                        <span style="color: #F98E1D; ">Rating: <span style="color: rgb(247, 187, 123); ">{{ .Rating }}</span></span>
+                                    </div>
+
+                                </div>
+                                <br/>
+                                <div class="content "><strong class="d-block "
+                                                              style="font-size: 14px; font-weight: 600; "></strong><span
+                                            class="d-block "
+                                            style="font-size: 14px; font-weight: 600; ">{{ .Review }}</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                {{ end }}
+            </div>
+            <div class="messages-block block " style="margin-bottom: 30px; margin-top: 15px; ">
+                <div class="row ">
+                    <div class="col-lg-12 ">
+                        <form action="#" method="post">
+                            <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
+                            <input type="hidden" name="reviewID" value="{{ .Shop.ID }}"/>
+                            <div class="form-group ">
+                            <label for="message-text " class="col-form-label ">Message:</label>
+                            <textarea class="form-control " name="reply_text" id="message-text "
+                                      style="border-color: #F98E1D; border-radius: 5px; width: 100%; "></textarea>
+                            <input type="number" name="rating" max="10">
+                        </div>
+                        <div class="d-flex flex-row-reverse ">
+                            <button type="button " class="btn p-2 "
+                                    style="background-color: #F98E1D; color: white; ">Write
+                            </button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 justify-content-center ">
+            <div class="messages-block block " style="padding: 0px ">
+                <div class="location ">
+                                <span style="color: #F98E1D; font-weight: 700; font-size: 20px;margin-bottom: 15px; margin-top: 10px; margin-left: 10px; ">Location: <span
+                                            style="color: #999999; margin-left: 10px; font-size: 18px; font-weight: 600; ">Bole</span><br/></span>
+                                <div class="mapouter">
+                                    <iframe width="300" height="300" id="gmap_canvas"
+                                            src="https://maps.google.com/maps?q={{.Shop.Lat}},{{.Shop.Long}}&hl=en&z=14&amp;output=embed"
+                                            frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                                </div>
+                                <style>
+                                    .mapouter {
+                                        position: relative;
+                                        text-align: right;
+                                        height: 300px;
+                                        width: 300px;
+                                    }
+
+                                    .gmap_canvas {
+                                        overflow: hidden;
+                                        background: none !important;
+                                        height: 350px;
+                                        width: 480px;
+                                    }
+                                </style>
+                </div>
+
+            </div>
+            <div class="messages-block block ">
+                <span class="d-flex justify-content-center " style="margin-bottom: 10px; ">Book Appointment</span>
+                <button type="button " class="btn "
+                        style="background-color: #F98E1D; color: white; width: 100%; ">Book Now
+                </button>
+            </div>
+            <div class="messages-block block ">
+                <span class=" " style="margin-bottom: 10px; ">Contact</span><br/>
+                {{with .Shop}}
+                    <i class="fa fa-phone "></i>{{.Phone}}</strong><br/>
+                    <i class="fa fa-email "></i>{{.Website }}</strong>
+                {{end}}
+            </div>
+
+            <br>
+
+        </div>
+
+    <br>
+    </div>
+    <br>
+
+{{end}}

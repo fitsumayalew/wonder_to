@@ -1,0 +1,41 @@
+{{ define "user.search.layout" }}
+    {{ template "user.header" . }}
+    {{ template "search.content" . }}
+    {{ template "user.footer" .}}
+{{ end }}
+
+{{ define "search.content"}}
+
+    <div class="d-flex align-items-stretch">
+        <div class="container-fluid">
+            {{ range . }}
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-9 justify-content-center">
+                        <div class="messages-block block">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <img src="/assets/img/{{ .Image }}" class="img-fluid" height="300px"
+                                         style="padding: 0px; margin: 0px"><br><br>
+                                </div>
+                                <div class="col-lg-6">
+                                    <span class="title" style="padding-bottom: 0px; margin-bottom: 15px;"><strong
+                                                style="font-size: 15; color: #F98E1D;">{{ .Name }}</strong></span>
+                                    <br>
+                                    <span>{{.Address}}</span><br>
+                                    <span style="color: #F98E1D;">{{ .Rating }}</span><br>
+                                    <div class="d-flex flex-row-reverse">
+                                        <a class="title p-2" style="margin-right: 15px;" href='/barbershop?id={{.ID}}'><strong
+                                                    style="font-size: 15px; color: rgb(247, 127, 0);">View</strong></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{ end }}
+        </div>
+    </div>
+
+
+
+{{end}}
