@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strconv"
 	"time"
+	"xCut/appointment"
 	. "xCut/constants"
 	"xCut/entity"
 	"xCut/form"
@@ -23,6 +24,7 @@ type AdminDashboardHandler struct {
 	shopService     shop.ShopService
 	reviewService   review.ReviewService
 	servicesService service.ServicesService
+	appointmentService appointment.AppointmentService
 	csrfSignKey     []byte
 }
 
@@ -31,9 +33,10 @@ func NewAdminDashboardHandler(
 	shopService shop.ShopService,
 	reviewService review.ReviewService,
 	servicesService service.ServicesService,
-	csrfSignKey []byte,
+	appointmentService appointment.AppointmentService,
+csrfSignKey []byte,
 ) *AdminDashboardHandler {
-	return &AdminDashboardHandler{tmpl: t, shopService: shopService, reviewService: reviewService, servicesService: servicesService, csrfSignKey: csrfSignKey}
+	return &AdminDashboardHandler{tmpl: t, shopService: shopService, reviewService: reviewService, servicesService: servicesService,appointmentService:appointmentService, csrfSignKey: csrfSignKey}
 }
 
 func (adminDashboardHandler *AdminDashboardHandler) AdminIndex(w http.ResponseWriter, r *http.Request) {
@@ -119,15 +122,14 @@ func (adminDashboardHandler *AdminDashboardHandler) AdminBasicInfoEdit(w http.Re
 
 		long, _ := strconv.ParseFloat(r.FormValue(LngKey), 32)
 		lat, _ := strconv.ParseFloat(r.FormValue(LatKey), 32)
-
-		if r.FormValue(ImageFile) != "" {
-			mf, _, err := r.FormFile(ImageFile)
-
+		mf, fb, err := r.FormFile(ImageFile)
+		defer mf.Close()
+		if fb.Filename != "" {
 			if err != nil {
 				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			}
 
-			fileName, err := util.GenerateFileName(&mf, r.FormValue(ImageFile))
+			fileName, err := util.GenerateFileName(&mf, fb.Filename)
 			if err != nil {
 				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			}
@@ -135,9 +137,6 @@ func (adminDashboardHandler *AdminDashboardHandler) AdminBasicInfoEdit(w http.Re
 			if err == nil {
 				shop.Image = fileName
 				err = util.WriteFile(&mf, shop.Image)
-			}
-			if mf != nil {
-				defer mf.Close()
 			}
 		}
 		shop.Name = r.FormValue(ShopNameKey)
@@ -186,7 +185,7 @@ func (adminDashboardHandler *AdminDashboardHandler) AdminSignUp(w http.ResponseW
 		//user, errs := adminDashboardHandler.shopService.
 
 		if !signUpForm.IsValid() {
-			adminDashboardHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
+			adminDashboardHandler.tmpl.ExecuteTemplate(w, "signup.shop.layout", signUpForm)
 			return
 		}
 
@@ -211,109 +210,7 @@ func (adminDashboardHandler *AdminDashboardHandler) AdminSignUp(w http.ResponseW
 	}
 }
 
-func (adminDashboardHandler *AdminDashboardHandler) AdminAppointments(w http.ResponseWriter, r *http.Request) {
-	currentSession, _ := r.Context().Value(ctxUserSessionKey).(*entity.Session)
-	shop, errs := adminDashboardHandler.shopService.GetShopByUserID(currentSession.UUID)
-	if len(errs) > 0 {
-		http.Redirect(w, r, "/admin/finishSignup", http.StatusSeeOther)
-		return
-	}
 
-	if r.Method == http.MethodGet {
-		CSFRToken, err := rtoken.GenerateCSRFToken(adminDashboardHandler.csrfSignKey)
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		}
-
-		shopMap := url.Values{}
-		shopMap[ShopNameKey] = []string{shop.Name}
-		shopMap[PhoneKey] = []string{shop.Phone}
-		shopMap[CityKey] = []string{shop.City}
-		shopMap[AddressKey] = []string{shop.Address}
-		shopMap[WebsiteKey] = []string{shop.Website}
-		shopMap[LatKey] = []string{fmt.Sprintf("%f", shop.Lat)}
-		shopMap[LngKey] = []string{fmt.Sprintf("%f", shop.Long)}
-		shopMap[CsrfKey] = []string{CSFRToken}
-		shopMap[WeekdaysOpenHoursStart] = []string{fmt.Sprintf("%02d:%02d", shop.WeekDayOpenHour/60, shop.WeekDayOpenHour%60)}
-		shopMap[WeekdaysOpenHoursEnd] = []string{fmt.Sprintf("%02d:%02d", shop.WeekDayCloseHour/60, shop.WeekDayCloseHour%60)}
-		shopMap[WeekendsOpenHoursStart] = []string{fmt.Sprintf("%02d:%02d", shop.WeekendOpenHour/60, shop.WeekendOpenHour%60)}
-		shopMap[WeekendsOpenHoursEnd] = []string{fmt.Sprintf("%02d:%02d", shop.WeekendCloseHour/60, shop.WeekendCloseHour%60)}
-		signUpForm := form.Input{Values: shopMap, VErrors: form.ValidationErrors{}}
-
-		adminDashboardHandler.tmpl.ExecuteTemplate(w, "admin.basic.edit.layout", signUpForm)
-	}
-
-	if util.IsParsableFormPost(w, r, adminDashboardHandler.csrfSignKey) {
-		err := r.ParseForm()
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		}
-		basicInfoEditForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
-		basicInfoEditForm.ValidateRequiredFields(ShopNameKey, PhoneKey, CityKey, AddressKey, LatKey, LngKey, WeekdaysOpenHoursEnd, WeekdaysOpenHoursStart, WeekendsOpenHoursEnd, WeekdaysOpenHoursStart)
-		basicInfoEditForm.MatchesPattern(PhoneKey, form.PhoneRX)
-		basicInfoEditForm.MatchesPattern(WebsiteKey, form.WebsiteRX)
-		basicInfoEditForm.ValidateStartAndEnd(WeekdaysOpenHoursStart, WeekdaysOpenHoursEnd)
-		basicInfoEditForm.ValidateStartAndEnd(WeekendsOpenHoursStart, WeekendsOpenHoursEnd)
-		basicInfoEditForm.MatchesPattern(LatKey, form.LngLatRX)
-		basicInfoEditForm.MatchesPattern(LngKey, form.LngLatRX)
-
-		if !basicInfoEditForm.IsValid() {
-			adminDashboardHandler.tmpl.ExecuteTemplate(w, "admin.basic.edit.layout", basicInfoEditForm)
-			return
-		}
-
-		weekdaysOpenHoursStart, _ := time.Parse("15:06", r.FormValue(WeekdaysOpenHoursStart))
-		weekdaysOpenHoursEnd, _ := time.Parse("15:06", r.FormValue(WeekdaysOpenHoursEnd))
-
-		weekendOpenHoursStart, _ := time.Parse("15:06", r.FormValue(WeekendsOpenHoursStart))
-		weekendOpenHoursEnd, _ := time.Parse("15:06", r.FormValue(WeekendsOpenHoursEnd))
-
-		long, _ := strconv.ParseFloat(r.FormValue(LngKey), 32)
-		lat, _ := strconv.ParseFloat(r.FormValue(LatKey), 32)
-
-		if r.FormValue(ImageFile) != "" {
-			mf, _, err := r.FormFile(ImageFile)
-
-			if err != nil {
-				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			}
-
-			fileName, err := util.GenerateFileName(&mf, r.FormValue(ImageFile))
-			if err != nil {
-				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			}
-			shop.Image = fileName
-			if err == nil {
-				shop.Image = fileName
-				err = util.WriteFile(&mf, shop.Image)
-			}
-			if mf != nil {
-				defer mf.Close()
-			}
-		}
-		shop.Name = r.FormValue(ShopNameKey)
-		shop.City = r.FormValue(CityKey)
-		shop.Lat = lat
-		shop.Long = long
-		shop.Address = r.FormValue(AddressKey)
-		shop.Phone = r.FormValue(PhoneKey)
-		shop.Website = r.FormValue(WebsiteKey)
-		shop.WeekDayOpenHour = uint(weekdaysOpenHoursStart.Hour()*60 + weekdaysOpenHoursStart.Minute())
-		shop.WeekDayCloseHour = uint(weekdaysOpenHoursEnd.Hour()*60 + weekdaysOpenHoursEnd.Minute())
-		shop.WeekendOpenHour = uint(weekendOpenHoursStart.Hour()*60 + weekendOpenHoursStart.Minute())
-		shop.WeekendCloseHour = uint(weekendOpenHoursEnd.Hour()*60 + weekendOpenHoursStart.Minute())
-		//shop.Services = nil
-
-		// Save the user to the database
-		_, ers := adminDashboardHandler.shopService.UpdateShop(shop)
-		if len(ers) > 0 {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			return
-		}
-		http.Redirect(w, r, "/admin/basicInfo", http.StatusSeeOther)
-
-	}
-}
 func (adminDashboardHandler *AdminDashboardHandler) AdminReviews(w http.ResponseWriter, r *http.Request) {
 	currentSession, _ := r.Context().Value(ctxUserSessionKey).(*entity.Session)
 	shop, errs := adminDashboardHandler.shopService.GetShopByUserID(currentSession.UUID)
@@ -523,7 +420,7 @@ func (adminDashboardHandler *AdminDashboardHandler) AdminServicesAdd(w http.Resp
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
-		http.Redirect(w, r, "/admin/services/new", http.StatusSeeOther)
+		http.Redirect(w, r, "/admin/services", http.StatusSeeOther)
 
 	}
 }
@@ -622,6 +519,22 @@ func (adminDashboardHandler *AdminDashboardHandler) AdminServicesUpdate(w http.R
 }
 
 func (adminDashboardHandler *AdminDashboardHandler) AdminServicesDelete(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == http.MethodGet {
+
+
+		id, err := strconv.Atoi(r.URL.Query().Get("id"))
+		if err != nil{
+
+		}
+		adminDashboardHandler.servicesService.DeleteService(uint(id))
+		http.Redirect(w, r, "/admin/services", http.StatusSeeOther)
+
+	}
+}
+
+
+func (adminDashboardHandler *AdminDashboardHandler) AdminAppointments(w http.ResponseWriter, r *http.Request) {
 	currentSession, _ := r.Context().Value(ctxUserSessionKey).(*entity.Session)
 	shop, errs := adminDashboardHandler.shopService.GetShopByUserID(currentSession.UUID)
 	if len(errs) > 0 {
@@ -630,94 +543,10 @@ func (adminDashboardHandler *AdminDashboardHandler) AdminServicesDelete(w http.R
 	}
 
 	if r.Method == http.MethodGet {
-		CSFRToken, err := rtoken.GenerateCSRFToken(adminDashboardHandler.csrfSignKey)
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		}
+		appointments, _ := adminDashboardHandler.appointmentService.GetAppointments(shop.ID)
 
-		servicesData := struct {
-			Values  url.Values
-			VErrors form.ValidationErrors
-			//Service entity.Service
-			CSRF string
-		}{
-			Values:  nil,
-			VErrors: nil,
-			//Service :  nil,
-			CSRF: CSFRToken,
-		}
-
-		adminDashboardHandler.tmpl.ExecuteTemplate(w, "admin.services.layout", servicesData)
+		err := adminDashboardHandler.tmpl.ExecuteTemplate(w, "admin.appointments.layout", appointments)
+		fmt.Println(err)
 	}
 
-	if util.IsParsableFormPost(w, r, adminDashboardHandler.csrfSignKey) {
-		err := r.ParseForm()
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		}
-		basicInfoEditForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
-		basicInfoEditForm.ValidateRequiredFields(ShopNameKey, PhoneKey, CityKey, AddressKey, LatKey, LngKey, WeekdaysOpenHoursEnd, WeekdaysOpenHoursStart, WeekendsOpenHoursEnd, WeekdaysOpenHoursStart)
-		basicInfoEditForm.MatchesPattern(PhoneKey, form.PhoneRX)
-		basicInfoEditForm.MatchesPattern(WebsiteKey, form.WebsiteRX)
-		basicInfoEditForm.ValidateStartAndEnd(WeekdaysOpenHoursStart, WeekdaysOpenHoursEnd)
-		basicInfoEditForm.ValidateStartAndEnd(WeekendsOpenHoursStart, WeekendsOpenHoursEnd)
-		basicInfoEditForm.MatchesPattern(LatKey, form.LngLatRX)
-		basicInfoEditForm.MatchesPattern(LngKey, form.LngLatRX)
-
-		if !basicInfoEditForm.IsValid() {
-			adminDashboardHandler.tmpl.ExecuteTemplate(w, "admin.basic.edit.layout", basicInfoEditForm)
-			return
-		}
-
-		weekdaysOpenHoursStart, _ := time.Parse("15:06", r.FormValue(WeekdaysOpenHoursStart))
-		weekdaysOpenHoursEnd, _ := time.Parse("15:06", r.FormValue(WeekdaysOpenHoursEnd))
-
-		weekendOpenHoursStart, _ := time.Parse("15:06", r.FormValue(WeekendsOpenHoursStart))
-		weekendOpenHoursEnd, _ := time.Parse("15:06", r.FormValue(WeekendsOpenHoursEnd))
-
-		long, _ := strconv.ParseFloat(r.FormValue(LngKey), 32)
-		lat, _ := strconv.ParseFloat(r.FormValue(LatKey), 32)
-
-		if r.FormValue(ImageFile) != "" {
-			mf, _, err := r.FormFile(ImageFile)
-
-			if err != nil {
-				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			}
-
-			fileName, err := util.GenerateFileName(&mf, r.FormValue(ImageFile))
-			if err != nil {
-				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			}
-			shop.Image = fileName
-			if err == nil {
-				shop.Image = fileName
-				err = util.WriteFile(&mf, shop.Image)
-			}
-			if mf != nil {
-				defer mf.Close()
-			}
-		}
-		shop.Name = r.FormValue(ShopNameKey)
-		shop.City = r.FormValue(CityKey)
-		shop.Lat = lat
-		shop.Long = long
-		shop.Address = r.FormValue(AddressKey)
-		shop.Phone = r.FormValue(PhoneKey)
-		shop.Website = r.FormValue(WebsiteKey)
-		shop.WeekDayOpenHour = uint(weekdaysOpenHoursStart.Hour()*60 + weekdaysOpenHoursStart.Minute())
-		shop.WeekDayCloseHour = uint(weekdaysOpenHoursEnd.Hour()*60 + weekdaysOpenHoursEnd.Minute())
-		shop.WeekendOpenHour = uint(weekendOpenHoursStart.Hour()*60 + weekendOpenHoursStart.Minute())
-		shop.WeekendCloseHour = uint(weekendOpenHoursEnd.Hour()*60 + weekendOpenHoursStart.Minute())
-		//shop.Services = nil
-
-		// Save the user to the database
-		_, ers := adminDashboardHandler.shopService.UpdateShop(shop)
-		if len(ers) > 0 {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			return
-		}
-		http.Redirect(w, r, "/admin/basicInfo", http.StatusSeeOther)
-
-	}
 }

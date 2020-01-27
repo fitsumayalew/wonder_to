@@ -256,7 +256,3 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
-func (userHandler *UserHandler) Index(w http.ResponseWriter, r *http.Request) {
-	userHandler.tmpl.ExecuteTemplate(w, "index.layout", nil)
-}

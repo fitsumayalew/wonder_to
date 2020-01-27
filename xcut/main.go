@@ -6,10 +6,14 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"html/template"
 	"net/http"
+	appointmentRepoImport "xCut/appointment/repository"
+	appointmentServiceImport "xCut/appointment/services"
 	"xCut/entity"
 	reviewRepoImport "xCut/review/repository"
 	reviewServiceImport "xCut/review/service"
 	"xCut/rtoken"
+	searchRepoImport "xCut/search/repository"
+	searchServiceImport "xCut/search/service"
 	serviceRepoImport "xCut/service/repository"
 	serviceServiceImport "xCut/service/service"
 	shopRepoImport "xCut/shop/repository"
@@ -92,13 +96,21 @@ func main() {
 	serviceRepo := serviceRepoImport.NewServiceGormRepo(dbconn)
 	servicesService := serviceServiceImport.NewServiceService(serviceRepo)
 
+	searchRepo := searchRepoImport.NewSearchGormRepo(dbconn)
+	searchService := searchServiceImport.NewSearchService(searchRepo)
+
+	appointmentRepo := appointmentRepoImport.NewAppointmentGormRepo(dbconn)
+	appointmentService := appointmentServiceImport.NewAppointmentService(appointmentRepo)
+
+
+
 	userHandler := handler.NewUserHandler(tmpl, userService, sessionService, roleService, csrfSignKey)
-	adminDashboardHandler := handler.NewAdminDashboardHandler(tmpl, shopService,reviewService, servicesService,csrfSignKey)
+	adminDashboardHandler := handler.NewAdminDashboardHandler(tmpl, shopService,reviewService, servicesService,appointmentService,csrfSignKey)
+	menuHandler := handler.NewMenuHandler(tmpl, shopService,reviewService, servicesService,appointmentService,searchService, csrfSignKey)
 
 	fs := http.FileServer(http.Dir("ui/assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", fs))
 
-	http.HandleFunc("/", userHandler.Index)
 	http.Handle("/admin", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminIndex))))
 	http.HandleFunc("/login", userHandler.Login)
 	http.Handle("/admin/finishSignup", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminSignUp))))
@@ -108,6 +120,12 @@ func main() {
 	http.Handle("/admin/appointments", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminAppointments))))
 	http.Handle("/admin/reviews", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminReviews))))
 	http.Handle("/admin/reply", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminReply))))
+
+
+	http.HandleFunc("/", menuHandler.Index)
+	http.HandleFunc("/search", menuHandler.Search)
+
+	http.HandleFunc("/barbershop", menuHandler.BarberShop)
 
 
 	http.Handle("/admin/services/new", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminServicesAdd))))
