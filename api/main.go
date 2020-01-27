@@ -42,7 +42,7 @@ func createTables(dbconn *gorm.DB) []error {
 	return nil
 }
 func main() {
-	dbconn, err := gorm.Open("postgres", "postgres://postgres:Bangtan123@localhost/xcut?sslmode=disable")
+	dbconn, err := gorm.Open("postgres", "postgres://postgres:root@localhost/xcut?sslmode=disable")
 
 	if err != nil {
 		panic(err)
@@ -50,7 +50,7 @@ func main() {
 
 	defer dbconn.Close()
 
-	createTables(dbconn)
+	//createTables(dbconn)
 
 	shopRepo2 := shopRepoImport.NewShopGormRepo(dbconn)
 	shopService2 := shopServiceImport.NewShopService(shopRepo2)
