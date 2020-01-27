@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"xCut/util"
 
-	"xCut/permission"
-	"xCut/rtoken"
-
+	. "xCut/constants"
 	"xCut/entity"
 	"xCut/form"
+	"xCut/permission"
+	"xCut/rtoken"
 	"xCut/session"
 	"xCut/user"
 )
@@ -25,18 +25,6 @@ type UserHandler struct {
 	csrfSignKey    []byte
 }
 
-const fullnameKey = "fullname"
-const passwordKey = "password"
-const emailKey = "email"
-const phoneKey = "phone"
-const typeKey = "type"
-const confirmPasswordKey = "confirmPassword"
-const shopNameKey = "shopName"
-const addressKey = "address"
-const lngKey = "lng"
-const latKey = "lat"
-const cityKey = "city"
-const csrfKey = "_csrf"
 
 const ctxUserSessionKey = "signed_in_user_session"
 
@@ -124,7 +112,7 @@ func (userHandler *UserHandler) Authorized(next http.Handler) http.Handler {
 
 		//Check the validity of signed token inside the form if the form is post
 		if r.Method == http.MethodPost {
-			if !rtoken.IsCSRFValid(r.FormValue(csrfKey), userHandler.csrfSignKey) {
+			if !rtoken.IsCSRFValid(r.FormValue(CsrfKey), userHandler.csrfSignKey) {
 				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
@@ -146,13 +134,13 @@ func (userHandler *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//Only reply to forms that have that are parsable and have valid csfrToken
-	if userHandler.isParsableFormPost(w, r) {
+	if util.IsParsableFormPost(w, r,userHandler.csrfSignKey) {
 
 		//Validate form data
 		loginForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
-		loginForm.ValidateRequiredFields(emailKey, passwordKey)
-		email := r.FormValue(emailKey)
-		password := r.FormValue(passwordKey)
+		loginForm.ValidateRequiredFields(EmailKey, PasswordKey)
+		email := r.FormValue(EmailKey)
+		password := r.FormValue(PasswordKey)
 		user, errs := userHandler.userService.UserByEmail(email)
 
 		///Check form validity and user password
@@ -210,26 +198,26 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//Only reply to forms that have that are parsable and have valid csfrToken
-	if userHandler.isParsableFormPost(w, r) {
+	if util.IsParsableFormPost(w, r,userHandler.csrfSignKey) {
 		///Validate the form data
 		signUpForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
-		signUpForm.ValidateRequiredFields(fullnameKey, emailKey, passwordKey)
-		signUpForm.MatchesPattern(emailKey, form.EmailRX)
-		signUpForm.MinLength(passwordKey, 8)
-		signUpForm.PasswordMatches(passwordKey, confirmPasswordKey)
-		signUpForm.MatchesPattern(phoneKey, form.PhoneRX)
+		signUpForm.ValidateRequiredFields(FullnameKey, EmailKey, PasswordKey)
+		signUpForm.MatchesPattern(EmailKey, form.EmailRX)
+		signUpForm.MinLength(PasswordKey, 8)
+		signUpForm.PasswordMatches(PasswordKey, ConfirmPasswordKey)
+		signUpForm.MatchesPattern(PhoneKey, form.PhoneRX)
 
 		if !signUpForm.IsValid() {
 			userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
 			return
 		}
-		if userHandler.userService.EmailExists(r.FormValue(emailKey)) {
-			signUpForm.VErrors.Add(emailKey, "This email is already in use!")
+		if userHandler.userService.EmailExists(r.FormValue(EmailKey)) {
+			signUpForm.VErrors.Add(EmailKey, "This email is already in use!")
 			userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
 			return
 		}
 		//Create password hash
-		hashedPassword, err := util.HashPassword(r.FormValue(passwordKey))
+		hashedPassword, err := util.HashPassword(r.FormValue(PasswordKey))
 		if err != nil {
 			signUpForm.VErrors.Add("password", "Password Could not be stored")
 			userHandler.tmpl.ExecuteTemplate(w, "signup.layout", signUpForm)
@@ -237,7 +225,7 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		}
 		//Create a user role for the User
 		role, errs := userHandler.roleService.RoleByName("USER")
-		if r.FormValue(typeKey) == "barbershop" {
+		if r.FormValue(TypeKey) == "barbershop" {
 			role, errs = userHandler.roleService.RoleByName("ADMIN")
 		} else {
 			role, errs = userHandler.roleService.RoleByName("USER")
@@ -250,9 +238,9 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		}
 		///Get the data from the form and construct user object
 		user := entity.User{
-			FullName: r.FormValue(fullnameKey),
-			Email:    r.FormValue(emailKey),
-			Phone:    r.FormValue(phoneKey),
+			FullName: r.FormValue(FullnameKey),
+			Email:    r.FormValue(EmailKey),
+			Phone:    r.FormValue(PhoneKey),
 			Password: string(hashedPassword),
 			RoleID:   role.ID,
 		}
@@ -268,11 +256,7 @@ func (userHandler *UserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (userHandler *UserHandler) isParsableFormPost(w http.ResponseWriter, r *http.Request) bool {
-	return r.Method == http.MethodPost &&
-		util.ParseForm(w, r) &&
-		rtoken.IsCSRFValid(r.FormValue(csrfKey), userHandler.csrfSignKey)
-}
+
 func (userHandler *UserHandler) Index(w http.ResponseWriter, r *http.Request) {
 	userHandler.tmpl.ExecuteTemplate(w, "index.layout", nil)
 }
