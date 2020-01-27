@@ -20,11 +20,19 @@ var authorities = authority{
 		roles:   []string{"ADMIN"},
 		methods: []string{"GET", "POST"},
 	},
-	"/finishSignup": permission{
+	"/admin/finishSignup": permission{
 		roles:   []string{"ADMIN"},
 		methods: []string{"GET", "POST"},
 	},
-	"/basicInfo": permission{
+	"/admin/basicInfo": permission{
+		roles:   []string{"ADMIN"},
+		methods: []string{"GET", "POST"},
+	},
+	"/admin/reviews": permission{
+		roles:   []string{"ADMIN"},
+		methods: []string{"GET"},
+	},
+	"/admin/reply": permission{
 		roles:   []string{"ADMIN"},
 		methods: []string{"GET", "POST"},
 	},
