@@ -9,6 +9,10 @@ type ReviewService struct {
 	reviewRepo review.ReviewRepository
 }
 
+func (rs *ReviewService) GetReviewSum(ShopID uint) (uint, error) {
+	return rs.GetReviewSum(ShopID)
+}
+
 func NewReviewService(revoRepo review.ReviewRepository) review.ReviewService {
 	return &ReviewService{reviewRepo: revoRepo}
 }

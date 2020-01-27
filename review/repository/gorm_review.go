@@ -10,6 +10,15 @@ type ReviewGormRepo struct {
 	conn *gorm.DB
 }
 
+func (revRepo *ReviewGormRepo) GetReviewSum(ShopID uint) (uint, error) {
+	var sum uint
+	errs := revRepo.conn.Where( "shop_id=?", ShopID).Select("sum(rating)").Row().Scan(&sum)
+	if errs !=nil {
+		return 0, errs
+	}
+	return sum, errs
+}
+
 // NewReviewtGormRepo returns new object of ReviewGormRepo
 func NewReviewGormRepo(db *gorm.DB) review.ReviewRepository {
 	return &ReviewGormRepo{conn: db}
@@ -34,6 +43,7 @@ func (revRepo *ReviewGormRepo) GetReviewsByShopID(ShopID uint) ([]entity.Review,
 	}
 	return revo, errs
 }
+
 
 // UpdateReview updates a given review in the database
 func (revRepo *ReviewGormRepo) UpdateReview(review *entity.Review) (*entity.Review, []error) {

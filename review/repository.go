@@ -7,7 +7,7 @@ import (
 type ReviewRepository interface {
 	GetReviews() ([]entity.Review, []error)
 	GetReview(id uint) (*entity.Review, []error)
-	//getRecentReview
+	GetReviewSum(ShopID uint) (uint, error)
 	StoreReview(review *entity.Review) (*entity.Review, []error)
 	UpdateReview(review *entity.Review) (*entity.Review, []error)
 	DeleteReview(id uint) (*entity.Review, []error)
