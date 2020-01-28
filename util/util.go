@@ -76,6 +76,6 @@ func WriteFile(mf *multipart.File, fname string) error {
 		return err
 	}
 	defer image.Close()
-	io.Copy(image, *mf)
+	_,err = io.Copy(image, *mf)
 	return nil
 }
