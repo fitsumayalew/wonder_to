@@ -3,14 +3,21 @@ package appointment
 import (
 	"github.com/jinzhu/gorm"
 	"errors"
-	"github.com/fitsumayalew/xCut/appointment"
-	"github.com/fitsumayalew/xCut/entity"
+	"xCut/appointment"
+	"xCut/entity"
 )
 
 type MockAppointmentRepo struct {
 	conn *gorm.DB
 }
 
+func (mappRepo *MockAppointmentRepo) GetAppointments(shopID uint) ([]entity.Appointment, []error) {
+	Appo := []entity.Appointment{entity.MockAppointment}
+	if shopID != 1 {
+		return nil, []error{errors.New("Not found")}
+	}
+	return Appo, nil
+}
 
 // NewAppointmenttGormRepo returns new object of MockAppointmentRepo
 func NewMockAppointmentRepo(db *gorm.DB) appointment.AppointmentRepository {
@@ -19,27 +26,28 @@ func NewMockAppointmentRepo(db *gorm.DB) appointment.AppointmentRepository {
 
 
 func (mappRepo *MockAppointmentRepo) GetUpcomingShopAppointments(shopID uint) ([]entity.Appointment, []error) {
-	Appo := entity.MockAppointment
+	Appo := []entity.Appointment{entity.MockAppointment}
 	if shopID != 1 {
 		return nil, []error{errors.New("Not found")}
 	}
-	return &Appo, nil
+	return Appo, nil
 }
 
 func (mappRepo *MockAppointmentRepo) GetUserAppointments(userID uint) ([]entity.Appointment, []error) {
-	Appo := entity.MockAppointment
+	Appo := []entity.Appointment{entity.MockAppointment}
 	if userID != 1 {
 		return nil, []error{errors.New("Not found")}
 	}
-	return &Appo, nil
+	return Appo, nil
 }
 
 
 // GetAppointmentByShopID retrieve a Appointment from the database by its shopid
 func (mappRepo *MockAppointmentRepo) GetAppointmentsByShopID(ShopID uint) ([]entity.Appointment, []error) {
-	Appo := entity.MockAppointment{}
+	Appo := []entity.Appointment{entity.MockAppointment}
+
 	if ShopID == 1 {
-		return &Appo, nil
+		return Appo, nil
 	}
 	return nil, []error{errors.New("Not found")}
 }
@@ -68,6 +76,6 @@ func (mappRepo *MockAppointmentRepo) DeleteAppointment(id uint) (*entity.Appoint
 
 // StoreAppointment stores a given Appointment in the database
 func (mappRepo *MockAppointmentRepo) StoreAppointment(appointment *entity.Appointment) (*entity.Appointment, []error) {
-	Appo := Appointment
+	Appo := appointment
 	return Appo,nil
 }

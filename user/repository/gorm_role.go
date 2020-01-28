@@ -20,11 +20,6 @@ func (roleRepo *RoleGormRepo) Role(id uint) (*entity.Role, []error) {
 	return &role, errs
 }
 
-func (roleRepo *RoleGormRepo) Roles() ([]entity.Role, []error) {
-	roles := []entity.Role{}
-	errs := roleRepo.conn.Find(&roles).GetErrors()
-	return roles, errs
-}
 
 func (roleRepo *RoleGormRepo) RoleByName(name string) (*entity.Role, []error) {
 	role := entity.Role{}

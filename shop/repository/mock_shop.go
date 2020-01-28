@@ -1,34 +1,35 @@
-package repository
+package shop
 
 import (
-	"github.com/jinzhu/gorm"
 	"errors"
-	"github.com/fitsumayalew/xCut/shop"
-	"github.com/fitsumayalew/xCut/entity"
+	"github.com/jinzhu/gorm"
+	"xCut/entity"
+	"xCut/shop"
 )
 
 type MockShopRepo struct {
 	conn *gorm.DB
 }
 
-
-
-func NewMockShopRepo(db *gorm.DB) Shop.ShopRepository {
-	return &MockShopRepo{conn: db}
+func (mShopRepo *MockShopRepo) GetShops() ([]entity.Shop, []error) {
+	Shp := []entity.Shop{entity.MockShop}
+	return Shp, nil
 }
 
-
-
-
-
-// GetShopByShopID retrieve a Shop from the database by its shopid
-func (mShopRepo *MockShopRepo) GetShopsByUserID(userID uint) ([]entity.Shop, []error) {
-	Shp := entity.MockShop{}
+func (mShopRepo *MockShopRepo) GetShopByUserID(userID uint) (*entity.Shop, []error) {
+	Shp := entity.MockShop
 	if userID== 1 {
 		return &Shp, nil
 	}
 	return nil, []error{errors.New("Not found")}
 }
+
+func NewMockShopRepo(db *gorm.DB) shop.ShopRepository {
+	return &MockShopRepo{conn: db}
+}
+
+
+
 
 // UpdateShop updates a given Shop in the database
 func (mShopRepo *MockShopRepo) UpdateShop(shop *entity.Shop) (*entity.Shop, []error) {
@@ -54,6 +55,6 @@ func (mShopRepo *MockShopRepo) DeleteShop(id uint) (*entity.Shop, []error) {
 
 // StoreShop stores a given Shop in the database
 func (mShopRepo *MockShopRepo) StoreShop(shop *entity.Shop) (*entity.Shop, []error) {
-	Shp := Shop
+	Shp := shop
 	return Shp,nil
 }

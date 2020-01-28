@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"github.com/jinzhu/gorm"
 	"xCut/entity"
 	"xCut/review"
@@ -8,6 +9,14 @@ import (
 
 type MockReviewRepo struct {
 	conn *gorm.DB
+}
+
+func (mrevRepo *MockReviewRepo) GetReview(id uint) (*entity.Review, []error) {
+	revo := entity.MockReview
+	if id == 1 {
+		return &revo, nil
+	}
+	return nil, []error{errors.New("Not found")}
 }
 
 // NewReviewtGormRepo returns new object of MockReviewRepo
@@ -23,13 +32,13 @@ func (mrevRepo *MockReviewRepo) GetReviews() ([]entity.Review, []error) {
 
 // GetReviewByShopID retrieve a review from the database by its shopid
 func (mrevRepo *MockReviewRepo) GetReviewsByShopID(ShopID uint) ([]entity.Review, []error) {
-	revo := entity.MockReview{}
-	if id == 1 {
-		return &revo, nil
+	revo := []entity.Review{entity.MockReview}
+	if ShopID == 1 {
+		return revo, nil
 	}
 	return nil, []error{errors.New("Not found")}
 }
-}
+
 
 // UpdateReview updates a given review in the database
 func (mrevRepo *MockReviewRepo) UpdateReview(review *entity.Review) (*entity.Review, []error) {
