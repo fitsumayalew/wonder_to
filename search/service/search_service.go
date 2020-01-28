@@ -1,14 +1,23 @@
 package search
 
 import (
-	"xCut/review"
+	"xCut/entity"
+	"xCut/search"
 )
 
-type LocationService struct {
-	locationRepo review.ReviewRepository
+type SearchService struct {
+	searchRepo search.SearchRepository
 }
 
-func LocationService(revoRepo review.ReviewRepository) review.ReviewService {
-	return &ReviewService{reviewRepo: revoRepo}
+func (s SearchService) GetByName(keyword string) ([]entity.Shop, error) {
+	return s.searchRepo.GetByName(keyword)
+}
+
+func (s SearchService) GetByLocation(lang float64, lat float64) ([]entity.Shop, error) {
+	return s.searchRepo.GetByLocation(lang,lat)
+}
+
+func NewSearchService(searchRepo search.SearchRepository) search.SearchService {
+	return &SearchService{searchRepo: searchRepo}
 }
 
