@@ -31,22 +31,24 @@ type User struct {
 	RoleID          uint
 }
 
-//Shop Represents the the shops the user views
+
+
 type Shop struct {
 	gorm.Model
-	Name             string `gorm:"type:varchar(255);not null"`
-	City             string
-	Lat              float64
-	Long             float64
-	Address          string `gorm:"type:varchar(255);not null; unique"`
-	Phone            string `gorm:"type:varchar(32)"`
-	Website          string `gorm:"type:varchar(255)"`
-	Image            string `gorm:"type:varchar(255)"`
-	UserID           uint
-	WeekDayOpenHour  uint `gorm:"default:480"`
-	WeekDayCloseHour uint `gorm:"default:1200"`
-	WeekendOpenHour  uint `gorm:"default:510"`
-	WeekendCloseHour uint `gorm:"default:1080"`
+	Name             string  `json:"name" gorm:"type:varchar(255);not null"`
+	City             string  `json:"city"`
+	Lat              float64 `json:"lat"`
+	Long             float64 `json:"long"`
+	Address          string  `json:"address" gorm:"type:varchar(255);not null;"`
+	Phone            string  `json:"phone" gorm:"type:varchar(32)"`
+	Website          string  `json:"website" gorm:"type:varchar(255)"`
+	Image            string  `json:"image"  gorm:"type:varchar(255)"`
+	UserID           uint    `json:"userid"`
+	WeekDayOpenHour  uint    `json:"dayopen" gorm:"default:480"`
+	WeekDayCloseHour uint    `json:"dayclose" gorm:"default:1200"`
+	WeekendOpenHour  uint    `json:"open" gorm:"default:510"`
+	WeekendCloseHour uint    `json:"close" gorm:"default:1080"`
+	Rating           uint    `json:"rating" gorm:"default:0"`
 }
 
 type Appointment struct {
@@ -73,7 +75,7 @@ type Review struct {
 	ShopID uint
 	User   User
 	Shop   Shop
-	Review string  `gorm:"type:varchar(1024);not null"`
-	Reply  string  `gorm:"type:varchar(1024);not null"`
-	Rating float32 `gorm:"not null"`
+	Review string `gorm:"type:varchar(1024);not null"`
+	Reply  string `gorm:"type:varchar(1024);not null"`
+	Rating uint   `gorm:"not null"`
 }

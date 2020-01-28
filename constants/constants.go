@@ -15,6 +15,7 @@ const CityKey = "city"
 const CsrfKey = "_csrf"
 
 const ReplyKey = "reply_text"
+const RatingKey = "rating"
 const ReviewIDKey = "review_id"
 
 const ServiceETCKey = "etc"

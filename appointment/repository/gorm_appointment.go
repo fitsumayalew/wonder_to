@@ -40,7 +40,7 @@ func (revRepo *AppointmentGormRepo) GetUserAppointments(userID uint) ([]entity.A
 // GetAppointmentByShopID retrieve a Appointment from the database by its shopid
 func (revRepo *AppointmentGormRepo) GetAppointments(shopID uint) ([]entity.Appointment, []error) {
 	appointments := []entity.Appointment{}
-	errs := revRepo.conn.Find(&appointments, "shop_id=?", shopID).GetErrors()
+	errs := revRepo.conn.Set("gorm:auto_preload", true).Find(&appointments, "shop_id=?", shopID).GetErrors()
 	if len(errs) > 0 {
 		return nil, errs
 	}
@@ -58,7 +58,7 @@ func (revRepo *AppointmentGormRepo) UpdateAppointment(appointment *entity.Appoin
 
 func (revRepo *AppointmentGormRepo) GetAppointment(id uint) (*entity.Appointment, []error) {
 	appointment := entity.Appointment{}
-	errs := revRepo.conn.First(&appointment, id).GetErrors()
+	errs := revRepo.conn.Set("gorm:auto_preload", true).First(&appointment, id).GetErrors()
 	if len(errs) > 0 {
 		return nil, errs
 	}
