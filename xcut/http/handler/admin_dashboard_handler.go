@@ -52,8 +52,15 @@ func (adminDashboardHandler *AdminDashboardHandler) AdminIndex(w http.ResponseWr
 }
 
 func (adminDashboardHandler *AdminDashboardHandler) AdminBasicInfo(w http.ResponseWriter, r *http.Request) {
-	currentSession, _ := r.Context().Value(ctxUserSessionKey).(*entity.Session)
-	shop, errs := adminDashboardHandler.shopService.GetShopByUserID(currentSession.UUID)
+	currentSession,_ := r.Context().Value(ctxUserSessionKey).(*entity.Session)
+
+	var shop *entity.Shop
+	var errs []error
+	if currentSession == nil {
+		shop,errs = adminDashboardHandler.shopService.GetShopByUserID(1)
+	}else {
+		shop, errs = adminDashboardHandler.shopService.GetShopByUserID(currentSession.UUID)
+	}
 	if len(errs) > 0 {
 		http.Redirect(w, r, "/admin/finishSignup", http.StatusSeeOther)
 		return

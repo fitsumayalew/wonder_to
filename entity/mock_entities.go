@@ -44,7 +44,7 @@ var MockShop = Shop{
 		ID:1,
 		CreatedAt: time.Time{},
 	},
-	Name:" Mock Shop 01 ",
+	Name:"Mock Shop 01",
 	City:"Mock City 01",
 	Lat:10.2,
 	Long:10.5,

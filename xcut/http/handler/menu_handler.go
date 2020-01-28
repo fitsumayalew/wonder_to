@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 	"xCut/appointment"
 	. "xCut/constants"
 	"xCut/entity"
@@ -95,14 +96,14 @@ func (menuHandler *MenuHandler) BarberShop(w http.ResponseWriter, r *http.Reques
 		}
 
 		shopData := struct {
-			Shop    entity.Shop
-			Reviews []entity.Review
+			Shop     entity.Shop
+			Reviews  []entity.Review
 			Services []entity.Service
 			CSRF     string
 		}{
-			Reviews: reviews,
-			Shop:    *shop,
-			Services:services,
+			Reviews:  reviews,
+			Shop:     *shop,
+			Services: services,
 			CSRF:     CSFRToken,
 		}
 		err = menuHandler.tmpl.ExecuteTemplate(w, "barbershop.layout", shopData)
@@ -142,8 +143,6 @@ func (menuHandler *MenuHandler) BarberShop(w http.ResponseWriter, r *http.Reques
 
 }
 
-
-
 func (menuHandler *MenuHandler) Review(w http.ResponseWriter, r *http.Request) {
 	var shopID uint64
 	if r.Method == http.MethodGet {
@@ -161,14 +160,14 @@ func (menuHandler *MenuHandler) Review(w http.ResponseWriter, r *http.Request) {
 
 		shopData := struct {
 			Shop    entity.Shop
-			CSRF     string
-			Values   url.Values
-			VErrors  form.ValidationErrors
+			CSRF    string
+			Values  url.Values
+			VErrors form.ValidationErrors
 		}{
 			Shop:    *shop,
-			CSRF:     CSFRToken,
-			Values:nil,
-			VErrors:nil,
+			CSRF:    CSFRToken,
+			Values:  nil,
+			VErrors: nil,
 		}
 		err = menuHandler.tmpl.ExecuteTemplate(w, "user.review.layout", shopData)
 		fmt.Println(err)
@@ -200,8 +199,8 @@ func (menuHandler *MenuHandler) Review(w http.ResponseWriter, r *http.Request) {
 			Rating: uint(rating),
 		}
 
-		shop,_ := menuHandler.shopService.GetShop(uint(shopID))
-		shop.Rating = (shop.Rating+ uint(rating))/2
+		shop, _ := menuHandler.shopService.GetShop(uint(shopID))
+		shop.Rating = (shop.Rating + uint(rating)) / 2
 		menuHandler.shopService.UpdateShop(shop)
 		menuHandler.reviewService.StoreReview(&review)
 
@@ -211,10 +210,9 @@ func (menuHandler *MenuHandler) Review(w http.ResponseWriter, r *http.Request) {
 
 }
 
-
-
 func (menuHandler *MenuHandler) Appointment(w http.ResponseWriter, r *http.Request) {
 
+	var shopID uint64
 	if r.Method == http.MethodGet {
 		id, err := strconv.Atoi(r.URL.Query().Get("id"))
 		if err != nil {
@@ -222,7 +220,6 @@ func (menuHandler *MenuHandler) Appointment(w http.ResponseWriter, r *http.Reque
 			return
 		}
 		shop, _ := menuHandler.shopService.GetShop(uint(id))
-		reviews, _ := menuHandler.reviewService.GetReviewsByShopID(uint(id))
 		services, _ := menuHandler.servicesService.GetServiceByShopID(uint(id))
 		CSFRToken, err := rtoken.GenerateCSRFToken(menuHandler.csrfSignKey)
 		if err != nil {
@@ -231,17 +228,19 @@ func (menuHandler *MenuHandler) Appointment(w http.ResponseWriter, r *http.Reque
 		}
 
 		shopData := struct {
-			Shop    entity.Shop
-			Reviews []entity.Review
-			Services []entity.Service
+			Shop     entity.Shop
 			CSRF     string
+			Services []entity.Service
+			Values   url.Values
+			VErrors  form.ValidationErrors
 		}{
-			Reviews: reviews,
-			Shop:    *shop,
-			Services:services,
+			Shop:     *shop,
 			CSRF:     CSFRToken,
+			Services: services,
+			Values:   nil,
+			VErrors:  nil,
 		}
-		err = menuHandler.tmpl.ExecuteTemplate(w, "barbershop.layout", shopData)
+		err = menuHandler.tmpl.ExecuteTemplate(w, "user.appointment.layout", shopData)
 		fmt.Println(err)
 		return
 
@@ -252,10 +251,27 @@ func (menuHandler *MenuHandler) Appointment(w http.ResponseWriter, r *http.Reque
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
-		reviewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
-		reviewForm.ValidateRequiredFields(ReplyKey, RatingKey)
-		rating, err := strconv.ParseUint(r.FormValue(RatingKey), 10, 32)
-		shopID, err := strconv.ParseUint(r.FormValue(ReviewIDKey), 10, 32)
+		appointmentForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
+		appointmentForm .ValidateRequiredFields("mydate", "shopID","selectOne")
+		shopID, err = strconv.ParseUint(r.FormValue("shopID"), 10, 32)
+		serviceID, err := strconv.ParseUint(r.FormValue("selectOne"), 10, 32)
+		//a:=strings.Split(r.FormValue("mydate"),"T")
+		//b:=strings.Split(a[0],"-")
+		//year:= b[0]
+		//month:= b[1]
+		//day:= b[2]
+		//c:=strings.Split(a[1],":")
+		//hour:= c[0]
+		//minute:= c[1]
+
+		mytime,err:= time.Parse(time.RFC3339,fmt.Sprint(r.FormValue("mydate"),":00Z"))
+		if mytime.Before(time.Now()){
+			appointmentForm.VErrors.Add("mydate","Can't input past date")
+		}
+		if !appointmentForm.IsValid() {
+			menuHandler.tmpl.ExecuteTemplate(w, "user.appointment.layout", appointmentForm)
+			return
+		}
 
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -263,17 +279,19 @@ func (menuHandler *MenuHandler) Appointment(w http.ResponseWriter, r *http.Reque
 		}
 		currentSession, _ := r.Context().Value(ctxUserSessionKey).(*entity.Session)
 
-		review := entity.Review{
+		appointment := entity.Appointment{
+
 			UserID: currentSession.UUID,
 			ShopID: uint(shopID),
-			Review: r.FormValue(ReplyKey),
-			Reply:  "",
-			Rating: uint(rating),
+			ServicesID: uint(serviceID),
+			AppointmentTime: &mytime,
 		}
 
-		menuHandler.reviewService.StoreReview(&review)
+
+		menuHandler.appointmentService.StoreAppointment(&appointment)
+
 	}
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/barbershop?id="+fmt.Sprint(shopID), http.StatusSeeOther)
 	return
 
 }
