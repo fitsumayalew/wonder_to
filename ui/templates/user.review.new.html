@@ -11,56 +11,34 @@
     <div class="page-content">
         <section class="no-padding-bottom" style="height: 700px; overflow-y: auto;">
             <div class="container-fluid">
-                <form action="#" id="service-form" method="post" enctype="multipart/form-data">
+                <form action="#" id="service-form" method="post">
                     <h2>Write a Reply</h2>
                     <input type="hidden" name="_csrf" value="{{ .CSRF }}"/>
-{{/*                    {{if .ReviewID}}*/}}
-{{/*                        <input type="hidden" name="review_id" value="{{ .ReviewID }}"/>*/}}
-{{/*                    {{else}}*/}}
-{{/*                        <input type="hidden" name="review_id" value='{{ .Values.Get "review_id"}}'/>*/}}
-{{/*                    {{end}}*/}}
+                    <input type="hidden" name="shopID" value="{{ .Shop.ID }}"/>
 
-                    <div class="form-group">
-                        <span style="color: rgb(247, 187, 123);">Name:</span><br/>
+                        <span style="color: rgb(247, 187, 123);">Review:</span><br/>
                         <div class="input-group">
 
-                            <input type="text" class="form-control " name="name" placeholder="Name"
-                                   required="required " value='{{ .Values.Get "Name" }}'/>
+                            <input type="text" class="form-control " name="review_text" placeholder="Review ..."
+                                   required="required " value='{{ .Values.Get "review_text" }}'/>
 
                         </div>
-                        {{with .VErrors.Get "Name" }}
+                        {{with .VErrors.Get "review_text" }}
                             <label class="text-danger">{{ . }}</label>
                         {{end}}
-                    </div>
 
-                    <div class="form-group">
-                        <span style="color: rgb(247, 187, 123);">Price:</span><br/>
+
+                        <span style="color: rgb(247, 187, 123);">Rating:</span><br/>
                         <div class="input-group">
 
-                            <input type="text" class="form-control " name="price" placeholder="price"
-                                   required="required " value='{{ .Values.Get "price" }}'/>
+                            <input type="number"  max="10" class="form-control " name="rating"
+                                   required="required " value='{{ .Values.Get "rating" }}'/>
 
                         </div>
-                        {{with .VErrors.Get "price" }}
+                        {{with .VErrors.Get "rating" }}
                             <label class="text-danger">{{ . }}</label>
                         {{end}}
-                    </div>
-
-
-                    <div class="form-group">
-                        <span style="color: rgb(247, 187, 123);">ETC(minutes):</span><br/>
-                        <div class="input-group">
-
-                            <input type="number"  max="100" class="form-control " name="etc"
-                                   required="required " value='{{ .Values.Get "etc" }}'/>
-
-                        </div>
-                        {{with .VErrors.Get "etc" }}
-                            <label class="text-danger">{{ . }}</label>
-                        {{end}}
-                    </div>
-
-                    <span>Image: </span><input type="file" name="image_file"><br>
+<br>
                     <input name="a" class="btn btn-lg btn-primary btn-block"  type="submit"><br/><br/>
 
 

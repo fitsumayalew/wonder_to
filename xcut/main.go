@@ -126,6 +126,8 @@ func main() {
 	http.HandleFunc("/search", menuHandler.Search)
 
 	http.HandleFunc("/barbershop", menuHandler.BarberShop)
+	http.Handle("/review", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(menuHandler.Review))))
+	http.HandleFunc("/appointment", menuHandler.Appointment)
 
 
 	http.Handle("/admin/services/new", userHandler.Authenticated(userHandler.Authorized(http.HandlerFunc(adminDashboardHandler.AdminServicesAdd))))

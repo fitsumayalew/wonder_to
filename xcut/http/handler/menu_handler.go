@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"net/url"
 	"strconv"
 	"xCut/appointment"
 	. "xCut/constants"
@@ -77,6 +78,142 @@ func (menuHandler *MenuHandler) Search(w http.ResponseWriter, r *http.Request) {
 }
 
 func (menuHandler *MenuHandler) BarberShop(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == http.MethodGet {
+		id, err := strconv.Atoi(r.URL.Query().Get("id"))
+		if err != nil {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+		shop, _ := menuHandler.shopService.GetShop(uint(id))
+		reviews, _ := menuHandler.reviewService.GetReviewsByShopID(uint(id))
+		services, _ := menuHandler.servicesService.GetServiceByShopID(uint(id))
+		CSFRToken, err := rtoken.GenerateCSRFToken(menuHandler.csrfSignKey)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		shopData := struct {
+			Shop    entity.Shop
+			Reviews []entity.Review
+			Services []entity.Service
+			CSRF     string
+		}{
+			Reviews: reviews,
+			Shop:    *shop,
+			Services:services,
+			CSRF:     CSFRToken,
+		}
+		err = menuHandler.tmpl.ExecuteTemplate(w, "barbershop.layout", shopData)
+		fmt.Println(err)
+		return
+
+	}
+
+	if util.IsParsableFormPost(w, r, menuHandler.csrfSignKey) {
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		reviewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
+		reviewForm.ValidateRequiredFields(ReplyKey, RatingKey)
+		rating, err := strconv.ParseUint(r.FormValue(RatingKey), 10, 32)
+		shopID, err := strconv.ParseUint(r.FormValue(ReviewIDKey), 10, 32)
+
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+		}
+		currentSession, _ := r.Context().Value(ctxUserSessionKey).(*entity.Session)
+
+		review := entity.Review{
+			UserID: currentSession.UUID,
+			ShopID: uint(shopID),
+			Review: r.FormValue(ReplyKey),
+			Reply:  "",
+			Rating: uint(rating),
+		}
+
+		menuHandler.reviewService.StoreReview(&review)
+	}
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+	return
+
+}
+
+
+
+func (menuHandler *MenuHandler) Review(w http.ResponseWriter, r *http.Request) {
+	var shopID uint64
+	if r.Method == http.MethodGet {
+		id, err := strconv.Atoi(r.URL.Query().Get("id"))
+		if err != nil {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+		shop, _ := menuHandler.shopService.GetShop(uint(id))
+		CSFRToken, err := rtoken.GenerateCSRFToken(menuHandler.csrfSignKey)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		shopData := struct {
+			Shop    entity.Shop
+			CSRF     string
+			Values   url.Values
+			VErrors  form.ValidationErrors
+		}{
+			Shop:    *shop,
+			CSRF:     CSFRToken,
+			Values:nil,
+			VErrors:nil,
+		}
+		err = menuHandler.tmpl.ExecuteTemplate(w, "user.review.layout", shopData)
+		fmt.Println(err)
+		return
+
+	}
+
+	if util.IsParsableFormPost(w, r, menuHandler.csrfSignKey) {
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+		reviewForm := form.Input{Values: r.PostForm, VErrors: form.ValidationErrors{}}
+		reviewForm.ValidateRequiredFields(ReviewKey, RatingKey)
+		rating, err := strconv.ParseUint(r.FormValue(RatingKey), 10, 32)
+		shopID, err = strconv.ParseUint(r.FormValue(ShopIDKey), 10, 32)
+
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+
+		}
+		currentSession, _ := r.Context().Value(ctxUserSessionKey).(*entity.Session)
+
+		review := entity.Review{
+			UserID: currentSession.UUID,
+			ShopID: uint(shopID),
+			Review: r.FormValue(ReviewKey),
+			Reply:  "",
+			Rating: uint(rating),
+		}
+
+		shop,_ := menuHandler.shopService.GetShop(uint(shopID))
+		shop.Rating = (shop.Rating+ uint(rating))/2
+		menuHandler.shopService.UpdateShop(shop)
+		menuHandler.reviewService.StoreReview(&review)
+
+	}
+	http.Redirect(w, r, "/barbershop?id="+fmt.Sprint(shopID), http.StatusSeeOther)
+	return
+
+}
+
+
+
+func (menuHandler *MenuHandler) Appointment(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == http.MethodGet {
 		id, err := strconv.Atoi(r.URL.Query().Get("id"))

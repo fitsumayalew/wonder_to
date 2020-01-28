@@ -18,6 +18,9 @@ const ReplyKey = "reply_text"
 const RatingKey = "rating"
 const ReviewIDKey = "review_id"
 
+const ShopIDKey = "shopID"
+const ReviewKey = "review_text"
+
 const ServiceETCKey = "etc"
 const ServicePriceKey = "price"
 const ServiceNameKey = "name"

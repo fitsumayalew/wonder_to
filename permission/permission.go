@@ -64,7 +64,16 @@ var authorities = authority{
 		roles:   []string{"ADMIN"},
 		methods: []string{"GET"},
 	},
+	"/review": permission{
+		roles:   []string{"USER"},
+		methods: []string{"GET","POST"},
+	},
+	"/appointment": permission{
+		roles:   []string{"USER"},
+		methods: []string{"GET","POST"},
+	},
 }
+
 
 
 
